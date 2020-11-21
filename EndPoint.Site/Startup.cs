@@ -1,6 +1,9 @@
+using MatinGram.Application.Interfaces;
+using MatinGram.Persistace.Context;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -23,6 +26,22 @@ namespace EndPoint.Site
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+
+
+            #region --Add DependencyInjection Service--
+            //Add DataBase Service
+            services.AddScoped<IDataBaseContext, DataBaseContext>();
+
+
+            #endregion
+
+
+            #region --ConnectionString--
+            string contectionString = @"Data Source=.; Initial Catalog=MatinGram_DB; Integrated Security=True;";
+            services.AddEntityFrameworkSqlServer().AddDbContext<DataBaseContext>(option => option.UseSqlServer(contectionString));
+            #endregion
+
             services.AddControllersWithViews();
         }
 

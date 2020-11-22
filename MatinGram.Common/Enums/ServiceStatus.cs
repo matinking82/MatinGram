@@ -13,6 +13,7 @@ namespace MatinGram.Common.Enums
         NotFound,
         InputParametersError,
         AccessDenied,
+        SaveFileError,
         Error
     }
 }

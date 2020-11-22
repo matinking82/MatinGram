@@ -1,4 +1,5 @@
-﻿using MatinGram.Application.Interfaces.FacadPatterns;
+﻿using EndPoint.Site.Utilities;
+using MatinGram.Application.Interfaces.FacadPatterns;
 using MatinGram.Application.Services.Users.Commands.UserSignup;
 using MatinGram.Common.Enums;
 using MatinGram.ViewModels.ViewModels.Users;
@@ -74,27 +75,13 @@ namespace EndPoint.Site.Controllers
                 }
 
                 //Login
-                var claims = new List<Claim>()
-                {
-                    new Claim(ClaimTypes.NameIdentifier,result.Data.UserId.ToString()),
-                    new Claim(ClaimTypes.MobilePhone,user.MobileNumber ),
-                    new Claim(ClaimTypes.Name, user.Name),
-                    new Claim(ClaimTypes.Role, UserInRole.User.ToString())
-                };
-                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                var principal = new ClaimsPrincipal(identity);
-                var properties = new AuthenticationProperties()
-                {
-                    IsPersistent = true,
-                };
-                HttpContext.SignInAsync(principal, properties);
+                HttpContext.LoginToSite(result.Data.UserId, user.MobileNumber, user.Name, UserInRole.User);
                 /////
 
                 ViewBag.Message = "حساب شما با موفقیت ایجاد شد";
                 return View("ShowMessage");
 
             }
-
             return View(user);
         }
 

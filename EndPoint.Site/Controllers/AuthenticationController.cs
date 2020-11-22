@@ -97,11 +97,6 @@ namespace EndPoint.Site.Controllers
                 return Redirect("/");
             }
 
-            if (User.Identity.IsAuthenticated)
-            {
-                return Redirect("/");
-            }
-
             return View();
         }
 
@@ -109,6 +104,11 @@ namespace EndPoint.Site.Controllers
         [Route("/Signin")]
         public IActionResult Signin([Bind("MobileNumber,Password")] UserSigninViewModel user)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return Redirect("/");
+            }
+
             if (ModelState.IsValid)
             {
                 RequestUserSigninDto request = new RequestUserSigninDto()

@@ -1,5 +1,6 @@
 ﻿using MatinGram.Application.Interfaces;
 using MatinGram.Application.Interfaces.FacadPatterns;
+using MatinGram.Application.Services.Users.Commands.UserSignin;
 using MatinGram.Application.Services.Users.Commands.UserSignup;
 using Microsoft.AspNetCore.Hosting;
 using System;
@@ -20,7 +21,7 @@ namespace MatinGram.Application.Services.Users.FacadPattern
             _context = context;
         }
 
-
+        
         private IUserSignupService _userSignupService;
         public IUserSignupService UserSignupService
         {
@@ -32,6 +33,20 @@ namespace MatinGram.Application.Services.Users.FacadPattern
                 }
 
                 return _userSignupService;
+            }
+        }
+
+        private IUserSigninService _userSigninService;
+        public IUserSigninService UserSigninService
+        {
+            get
+            {
+                if (_userSigninService == null)
+                {
+                    _userSigninService = new UserSigninService(_context);
+                }
+
+                return _userSigninService;
             }
         }
 

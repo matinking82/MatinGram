@@ -29,5 +29,10 @@ namespace EndPoint.Site.Utilities
             };
             httpContext.SignInAsync(principal, properties);
         }
+
+        public static void SignoutSite(this HttpContext httpContext)
+        {
+            httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        }
     }
 }

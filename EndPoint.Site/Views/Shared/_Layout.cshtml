@@ -1,48 +1,117 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - EndPoint.Site</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
+    <meta charset="UTF-8">
+    <title>@ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+    <link rel="stylesheet" type="text/css" href="~/ChatroomRefrences/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="~/ChatroomRefrences/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="~/ChatroomRefrences/css/main.css">
+    <script type="text/javascript" src="~/ChatroomRefrences/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="~/ChatroomRefrences/js/popper.js"></script>
+    <script type="text/javascript" src="~/ChatroomRefrences/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="~/ChatroomRefrences/css/stylemsg.css">
+    <link rel="stylesheet" href="~/ChatroomRefrences/css/normalizemsg.css">
+    <link rel="stylesheet" href="~/ChatroomRefrences/css/normalizemsg.css">
+    <link rel="stylesheet" type="text/css" href="~/ChatroomRefrences/css/responsive.css">
+    <script type="text/javascript" src="~/ChatroomRefrences/js/custom.js"></script>
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">EndPoint.Site</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
+
+<body class="my-background-2">
+
+
+    <!-- Nav Bar -->
+    <!-- <div class="menu-area fixed-top">
+        <div class="container">
+            <div class="logo">
+                <a href="#">Amader Support</a>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+
+            <div class="menu-bar">
+                <div class="menu-button">
+                    <i class="fa fa-bars"></i>
+                </div>
+                <nav class="menu">
+                    <ul>
+                        <li>
+                            <a href="#">Hi sony !</a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i style="font-size: 25px;" class="far fa-bell" id="notification" onclick="notification()"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">Manager</a>
+                        </li>
+                        <li>
+                            <a href="#">Time tracker</a>
+                        </li>
+                        <li>
+                            <a href="#">Finance</a>
+                        </li>
+                        <li>
+                            <a href="#">Email Search</a>
+                        </li>
+                        <li>
+                            <a href="#">Quotes</a>
+                        </li>
+                        <li>
+                            <a href="#">logout</a>
+                        </li>
+
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div> -->
+    <!-- Nav Bar -->
+    <!-- <div class="task-button-area">
+        <div class="container">
+            <div class="task-status">
+                MCK(2)
+            </div>
+            <div class="button-area">
+                <button class="btn btn-info">Add Task</button>
+                <button class="btn btn-info">Add Member</button>
+                <button class="btn btn-info">Manage Team</button>
+            </div>
+        </div>
+
+    </div> -->
+
+    <div class="wrapper">
+        <!-- <ul class="Top-Menu">
+            <li>
+                <a href=""> 123</a>
+            </li>
+            <li>
+                <a href=""> 123</a>
+            </li>
+            <li>
+                <a href=""> 123</a>
+            </li>
+            <li>
+                <a href=""> 123</a>
+            </li>
+            <li>
+                <a href=""> 123</a>
+            </li>
+        </ul> -->
+        <main class="main">
+
             @RenderBody()
+
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 1399 - EndPoint.Site - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+
+
+    @RenderSection("Scripts",false)
+
 </body>
+
 </html>

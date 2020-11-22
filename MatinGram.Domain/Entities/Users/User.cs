@@ -1,5 +1,6 @@
 ﻿using MatinGram.Common.Enums;
 using MatinGram.Domain.Entities.Chatrooms;
+using MatinGram.Domain.Entities.Common;
 using MatinGram.Domain.Entities.Messages;
 using MatinGram.Domain.Entities.Relations;
 using System;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace MatinGram.Domain.Entities.Users
 {
-    public class User
+    public class User : BaseEntity
     {
         [Key]
         public long Id { get; set; }
@@ -38,6 +39,8 @@ namespace MatinGram.Domain.Entities.Users
         [MinLength(10)]
         [MaxLength(100)]
         public string Bio { get; set; }
+
+        public DateTime LastOnline { get; set; }
 
         public UserInRole UserInRole { get; set; }
 

@@ -1,6 +1,8 @@
-﻿namespace MatinGram.Domain.Entities.Chatrooms
+﻿using MatinGram.Domain.Entities.Common;
+
+namespace MatinGram.Domain.Entities.Chatrooms
 {
-    public class ChatroomImage
+    public class ChatroomImage : BaseEntity
     {
         public long Id { get; set; }
 

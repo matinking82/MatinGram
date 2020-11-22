@@ -21,6 +21,7 @@ namespace MatinGram.Domain.Entities.Messages
 
         [Required]
         public DateTime SendDate { get; set; }
+        public DateTime UpdateTime { get; set; }
 
         public string ImageName { get; set; }
 

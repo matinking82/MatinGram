@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MatinGram.Domain.Entities.Common;
+using System.ComponentModel.DataAnnotations;
 
 namespace MatinGram.Domain.Entities.Users
 {
-    public class UserImage
+    public class UserImage:BaseEntity
     {
         [Key]
         public long Id { get; set; }

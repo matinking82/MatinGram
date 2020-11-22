@@ -28,8 +28,6 @@ namespace MatinGram.Domain.Entities.Users
         public string MobileNumber { get; set; }
 
         [Required]
-        [MinLength(8)]
-        [MaxLength(50)]
         public string Password { get; set; }
 
         [MinLength(3)]

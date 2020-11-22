@@ -16,4 +16,13 @@
     <ProjectReference Include="..\MatinGram.Domain\MatinGram.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\Chatrooms\Commands\" />
+    <Folder Include="Services\Chatrooms\Queries\" />
+    <Folder Include="Services\Messages\Commands\" />
+    <Folder Include="Services\Messages\Queries\" />
+    <Folder Include="Services\Users\Commands\" />
+    <Folder Include="Services\Users\Queries\" />
+  </ItemGroup>
+
 </Project>

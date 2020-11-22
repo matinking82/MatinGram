@@ -1,4 +1,8 @@
 using MatinGram.Application.Interfaces;
+using MatinGram.Application.Interfaces.FacadPatterns;
+using MatinGram.Application.Services.Chatrooms.FacadPattern;
+using MatinGram.Application.Services.Messages.FacadPattern;
+using MatinGram.Application.Services.Users.FacadPattern;
 using MatinGram.Persistace.Context;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -32,6 +36,11 @@ namespace EndPoint.Site
             #region --Add DependencyInjection Service--
             //Add DataBase Service
             services.AddScoped<IDataBaseContext, DataBaseContext>();
+
+            //Add Facad Patterns
+            services.AddScoped<IUsersFacad, UsersFacad>();
+            services.AddScoped<IMessagesFacad, MessagesFacad>();
+            services.AddScoped<IChatroomsFacad, ChatroomsFacad>();
 
 
             #endregion

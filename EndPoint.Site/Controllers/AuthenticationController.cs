@@ -27,6 +27,11 @@ namespace EndPoint.Site.Controllers
         [Route("/Signup")]
         public IActionResult Signup()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return Redirect("/");
+            }
+
             return View();
         }
 
@@ -34,6 +39,11 @@ namespace EndPoint.Site.Controllers
         [Route("/Signup")]
         public IActionResult Signup([Bind("MobileNumber,Name,Password,ConfirmPassword,ImageFile")] UserSignupViewModel user)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return Redirect("/");
+            }
+
             if (ModelState.IsValid)
             {
                 if (user.Password != user.ConfirmPassword)
@@ -51,45 +61,42 @@ namespace EndPoint.Site.Controllers
                 };
                 var result = _usersFacad.UserSignupService.Execute(request);
 
-
-                if (result.Status != ServiceStatus.Success)
+                switch (result.Status)
                 {
-                    switch (result.Status)
-                    {
-                        case ServiceStatus.SystemError:
-                            ViewBag.Message = "مشکلی در سیستم پیش آمد";
-                            break;
-
-                        case ServiceStatus.NotFound:
-                            return NotFound();
-
-                        case ServiceStatus.SaveFileError:
-                            ViewBag.Message = "مشکلی در ذخیره فایل پیش آمد";
-                            break;
-
-                        case ServiceStatus.Error:
-                            ViewBag.Message = result.Message;
-                            break;
-                    }
-                    return View("ShowMessage");
+                    case ServiceStatus.Success:
+                        HttpContext.LoginToSite(result.Data.UserId, user.MobileNumber, user.Name, UserInRole.User);
+                        ViewBag.Message = "حساب شما با موفقیت ایجاد شد";
+                        break;
+                    case ServiceStatus.SystemError:
+                        ViewBag.Message = "مشکلی در سیستم پیش آمد";
+                        break;
+                    case ServiceStatus.NotFound:
+                        return NotFound();
+                        
+                    case ServiceStatus.SaveFileError:
+                        ViewBag.Message = "مشکلی در ذخیره فایل پیش آمد";
+                        break;
+                    case ServiceStatus.Error:
+                        ViewBag.Message = result.Message;
+                        break;
                 }
-
-                //Login
-                HttpContext.LoginToSite(result.Data.UserId, user.MobileNumber, user.Name, UserInRole.User);
-                /////
-
-                ViewBag.Message = "حساب شما با موفقیت ایجاد شد";
                 return View("ShowMessage");
+
 
             }
             return View(user);
         }
 
-
         [HttpGet]
         [Route("/Signin")]
         public IActionResult Signin()
         {
+
+            if (User.Identity.IsAuthenticated)
+            {
+                return Redirect("/");
+            }
+
             if (User.Identity.IsAuthenticated)
             {
                 return Redirect("/");
@@ -102,9 +109,50 @@ namespace EndPoint.Site.Controllers
         [Route("/Signin")]
         public IActionResult Signin([Bind("MobileNumber,Password")] UserSigninViewModel user)
         {
+            if (ModelState.IsValid)
+            {
+                RequestUserSigninDto request = new RequestUserSigninDto()
+                {
+                    MobileNumber = user.MobileNumber,
+                    Password = user.Password
+                };
+                var result = _usersFacad.UserSigninService.Execute(request);
+
+
+
+                switch (result.Status)
+                {
+                    case ServiceStatus.Success:
+                        HttpContext.LoginToSite(result.Data.Id, user.MobileNumber, result.Data.Name, result.Data.UserInRole);
+                        ViewBag.Message = "باموفقیت وارد شدید";
+                        break;
+                    case ServiceStatus.SystemError:
+                        ViewBag.Message = "مشکلی در سیستم پیش آمد";
+                        break;
+                    case ServiceStatus.NotFound:
+                        ViewBag.Message = "کاربری با این مشخصات یافت نشد";
+                        break;
+                    case ServiceStatus.Error:
+                        ViewBag.Message = result.Message;
+                        break;
+                }
+
+                return View("ShowMessage");
+
+            }
             return View(user);
         }
 
+        [HttpGet]
+        [Route("/Signout")]
+        public IActionResult Signout()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                HttpContext.SignoutSite();
+            }
 
+            return Redirect("/");
+        }
     }
 }

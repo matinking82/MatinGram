@@ -1,5 +1,4 @@
-﻿using EndPoint.Site.Utilities;
-using MatinGram.Application.Interfaces.FacadPatterns;
+﻿using MatinGram.Application.Interfaces.FacadPatterns;
 using MatinGram.Application.Services.Users.Commands.UserSignup;
 using MatinGram.Common.Enums;
 using MatinGram.ViewModels.ViewModels.Users;

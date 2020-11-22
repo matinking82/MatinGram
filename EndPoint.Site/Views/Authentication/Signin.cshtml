@@ -1,4 +1,4 @@
-﻿
+﻿@model MatinGram.ViewModels.ViewModels.Users.UserSigninViewModel
 @{
     ViewData["Title"] = "Signin";
     Layout = "~/Views/Shared/_LoginLayout.cshtml";
@@ -16,7 +16,8 @@
             <div class="col-md-12">
                 <div class="content">
                     <h1 class="my-color">Sign in to Swipe</h1>
-                    <div class="third-party">
+
+                    @*<div class="third-party">
                         <button class="btn item bg-blue">
                             <i class="material-icons">pages</i>
                         </button>
@@ -27,19 +28,22 @@
                             <i class="material-icons">whatshot</i>
                         </button>
                     </div>
-                    <p>or use your email account:</p>
-                    <form>
+                    <p>or use your email account:</p>*@
+
+                    <form asp-action="Signin" method="post">
                         <div class="form-group">
-                            <input type="email" id="inputEmail" class="form-control" placeholder="Email Address" required>
+                            <input asp-for="MobileNumber" id="inputMobileNumber" class="form-control" placeholder="شماره موبایل" required>
+                            <span asp-validation-for="MobileNumber"></span>
                             <button class="btn icon"><i class="material-icons">mail_outline</i></button>
                         </div>
                         <div class="form-group">
-                            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                            <input asp-for="Password" id="inputPassword" class="form-control" placeholder="کلمه عبور" required>
+                            <span asp-validation-for="Password"></span>
                             <button class="btn icon"><i class="material-icons">lock_outline</i></button>
                         </div>
-                        <button type="submit" class="btn button" formaction="index-2.html">Sign In</button>
+                        <button type="submit" class="btn button">ورود</button>
                         <div class="callout">
-                            <span>Don't have account? <a href="sign-up.html">Create Account</a></span>
+                            <span>حسابی ندارید؟ <a href="/Signup">ایجاد حساب</a></span>
                         </div>
                     </form>
                 </div>

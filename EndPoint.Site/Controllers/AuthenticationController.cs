@@ -30,5 +30,14 @@ namespace EndPoint.Site.Controllers
         {
             return View();
         }
+
+        [HttpPost]
+        [Route("/Signin")]
+        public IActionResult Signin([Bind("MobileNumber,Password")] UserSigninViewModel user)
+        {
+            return View(user);
+        }
+
+
     }
 }

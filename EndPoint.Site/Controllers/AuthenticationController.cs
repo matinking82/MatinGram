@@ -3,10 +3,13 @@ using MatinGram.Application.Interfaces.FacadPatterns;
 using MatinGram.Application.Services.Users.Commands.UserSignup;
 using MatinGram.Common.Enums;
 using MatinGram.ViewModels.ViewModels.Users;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace EndPoint.Site.Controllers
@@ -72,8 +75,21 @@ namespace EndPoint.Site.Controllers
                 }
 
                 //Login
-                HttpContext.LoginToSite(result.Data.UserId, user.MobileNumber, user.Name, UserInRole.User);
-                //
+                var claims = new List<Claim>()
+                {
+                    new Claim(ClaimTypes.NameIdentifier,result.Data.UserId.ToString()),
+                    new Claim(ClaimTypes.MobilePhone,user.MobileNumber ),
+                    new Claim(ClaimTypes.Name, user.Name),
+                    new Claim(ClaimTypes.Role, UserInRole.User.ToString())
+                };
+                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var principal = new ClaimsPrincipal(identity);
+                var properties = new AuthenticationProperties()
+                {
+                    IsPersistent = true,
+                };
+                HttpContext.SignInAsync(principal, properties);
+                /////
 
                 ViewBag.Message = "حساب شما با موفقیت ایجاد شد";
                 return View("ShowMessage");
@@ -88,6 +104,11 @@ namespace EndPoint.Site.Controllers
         [Route("/Signin")]
         public IActionResult Signin()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return Redirect("/");
+            }
+
             return View();
         }
 

@@ -1,5 +1,7 @@
 ﻿using MatinGram.Application.Interfaces;
 using MatinGram.Application.Interfaces.FacadPatterns;
+using MatinGram.Application.Services.Users.Commands.UserSignup;
+using Microsoft.AspNetCore.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,13 +10,29 @@ using System.Threading.Tasks;
 
 namespace MatinGram.Application.Services.Users.FacadPattern
 {
-    public class UsersFacad: IUsersFacad
+    public class UsersFacad : IUsersFacad
     {
         private readonly IDataBaseContext _context;
-
-        public UsersFacad(IDataBaseContext context)
+        private readonly IHostingEnvironment _environment;
+        public UsersFacad(IDataBaseContext context, IHostingEnvironment environment)
         {
+            _environment = environment;
             _context = context;
+        }
+
+
+        private IUserSignupService _userSignupService;
+        public IUserSignupService UserSignupService
+        {
+            get
+            {
+                if (_userSignupService == null)
+                {
+                    _userSignupService = new UserSignupService(_context, _environment);
+                }
+
+                return _userSignupService;
+            }
         }
 
     }

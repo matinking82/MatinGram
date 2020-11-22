@@ -4,8 +4,10 @@ using MatinGram.Application.Services.Chatrooms.FacadPattern;
 using MatinGram.Application.Services.Messages.FacadPattern;
 using MatinGram.Application.Services.Users.FacadPattern;
 using MatinGram.Persistace.Context;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -31,7 +33,17 @@ namespace EndPoint.Site
         public void ConfigureServices(IServiceCollection services)
         {
 
-
+            services.AddAuthentication(options =>
+            {
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            }).AddCookie(options =>
+            {
+                options.LoginPath = new PathString("/Signin");
+                options.AccessDeniedPath = new PathString("/");
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(43200.0);
+            });
 
             #region --Add DependencyInjection Service--
             //Add DataBase Service

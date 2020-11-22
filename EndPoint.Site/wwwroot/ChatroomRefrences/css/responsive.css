@@ -1,0 +1,86 @@
+@media only screen and (max-width: 768px) {
+	.col, .col-right {
+		display: none;
+	}  
+
+	.col-left {
+		flex: none;
+		width: 100%;
+	} 
+
+	.task-button-area {
+		margin-top: 0;
+	}
+
+	.messages {
+	height: 60vh;
+}
+
+}
+
+@media only screen and (max-width: 1000px) {
+	.menu-area{
+		position: relative;
+	}
+	
+	.menu-area .menu-button{
+		display: block;
+		margin-bottom: 10px;
+	}
+	.menu-area .menu {
+		position: absolute;
+		top: 100%;
+		left: 0;
+		z-index: 9999;
+		background-color: green;
+		width: 100%;
+		display: none;
+}
+	
+	.menu-area .menu-bar .menu ul {
+		
+		
+	}
+
+	.menu-area .menu-bar .menu ul li {
+		display: block;
+		width: 100%;
+	}
+
+	.menu-area .menu ul li a {
+		
+		display: block;
+ 
+		
+	}
+	
+	.menu-area .menu-bar .menu ul ul {
+		position: absolute;
+		
+		z-index: 9999999;
+		position: static;
+
+	}
+
+	.menu-area .menu-bar .menu ul li ul li {
+		width: 100%;
+		background-color: green;
+	}
+	.menu-area .menu-bar .menu ul li:hover > ul {
+	display: none;
+	}
+
+	.menu-area .menu-bar .menu {
+		margin-top: 63px;
+	}
+
+	.task-button-area {
+		margin-top: 0;
+	}
+	
+}
+
+@media only screen and (max-width: 458px) {
+	.messages {
+	height: 400px;
+}

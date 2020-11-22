@@ -1,0 +1,222 @@
+/*
+	 NAV BAR
+	------------
+*/
+
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+body {
+    overflow-y: hidden;
+}
+
+ul.Top-Menu {
+    height: 10vh;
+    background: linear-gradient(150deg, rgb(26, 152, 255) 0, rgb(97, 171, 231) 100%, rgb(166, 208, 241) 0);
+    overflow: hidden;
+    direction: rtl;
+}
+
+ul.Top-Menu li a {
+    display: inline-block;
+    padding: 20px;
+    color: gold;
+    text-shadow: black -1px -1px 10px;
+    font-size: 2.5em;
+    float: right;
+    text-decoration: none;
+}
+
+ul.Top-Menu li a:hover {
+    background: linear-gradient(305deg, rgba(140, 167, 255, 1) 0, rgba(139, 84, 249, 1) 50%, rgba(131, 33, 243, 1) 100%);
+}
+
+.height-max {
+    height: 100%!important;
+}
+
+.message-sent {
+    cursor: pointer;
+}
+
+.message-received {
+    cursor: pointer;
+}
+
+main.main {
+    height: 100vh;
+}
+
+.menu-area {
+    background-color: #000;
+    border-bottom: 5px solid #fff;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.menu-area:after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+.menu-area .menu-button {
+    float: right;
+    padding-top: 20px;
+    display: none;
+}
+
+.menu-area .menu-button i {
+    color: #fff;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.menu-area .menu-bar {}
+
+.menu-area .menu-bar .menu {
+    width: 100%;
+    margin: auto;
+}
+
+.menu-area .menu-bar .menu ul {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+    margin: auto;
+}
+
+.menu-area .menu-bar .menu ul>li {
+    border-left: 1px solid #fff;
+    position: relative;
+}
+
+.menu-area .menu-bar .menu ul li a {
+    text-decoration: none;
+    color: #fff;
+    padding: 8px 10px;
+    display: block;
+    line-height: 25px;
+}
+
+.menu-area .menu-bar .menu ul li a:hover {
+    background-color: #CE5A1B;
+}
+
+.menu-area .menu-bar .menu ul ul {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    display: none;
+    z-index: 111;
+}
+
+.menu-area .menu-bar .menu ul li:hover>ul {
+    display: block;
+}
+
+.menu-area .menu-bar .menu ul ul li {
+    background-color: #000;
+    border-left: none;
+    width: 101px;
+}
+
+.menu-area .menu-bar .menu li:hover {
+    background-color: #CE5A1B;
+    display: block;
+}
+
+
+/* ALL CSS */
+
+.logo {
+    display: inline-block;
+    float: left;
+    padding-top: 8px;
+}
+
+.logo a {
+    text-decoration: none;
+}
+
+.menu-bar {
+    float: right;
+}
+
+.task-button-area {
+    margin-top: 47px;
+    padding: 5px 0;
+}
+
+.task-status {
+    display: inline-block;
+    float: left;
+}
+
+.button-area {
+    float: right;
+}
+
+.task-button-area:after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+.wrapper {
+    border: .5px solid rgba(0, 0, 0, 0.1);
+}
+
+.messages {
+    height: 85vh;
+    overflow-y: auto;
+}
+
+.col {
+    height: 85vh;
+    padding-right: 0;
+}
+
+.grid-message {
+    overflow-y: auto;
+}
+
+.wrapper {
+    height: 100vh;
+}
+
+.messages li {
+    cursor: pointer;
+}
+
+.messages li:hover {
+    background-color: rgb(25, 34, 39)!important;
+}
+
+.messages li h3,
+.user-panel h3 {
+    color: rgb(197, 172, 29);
+}
+
+.txt-message {
+    resize: none;
+    height: 80px;
+    padding: 20px;
+    direction: rtl;
+    border: none;
+}
+
+.my-background {
+    background-color: rgb(38, 50, 56)!important;
+}
+
+.my-background-2 {
+    background-color: rgb(25, 34, 39)!important;
+}

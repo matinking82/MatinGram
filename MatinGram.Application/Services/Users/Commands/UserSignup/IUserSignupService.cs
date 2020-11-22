@@ -1,5 +1,6 @@
 ﻿using MatinGram.Application.Interfaces;
 using MatinGram.Common.Dto;
+using MatinGram.Common.Enums;
 using MatinGram.Common.Utilities;
 using MatinGram.Domain.Entities.Users;
 using Microsoft.AspNetCore.Hosting;
@@ -36,7 +37,8 @@ namespace MatinGram.Application.Services.Users.Commands.UserSignup
                     Name = request.Name,
                     Password = request.Password.ToHashed(),
                     InsertTime = DateTime.Now,
-                    LastOnline = DateTime.Now
+                    LastOnline = DateTime.Now,
+                    UserInRole = UserInRole.User
                 };
 
                 _context.Users.Add(newUser);

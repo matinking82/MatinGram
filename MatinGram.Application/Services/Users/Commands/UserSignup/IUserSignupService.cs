@@ -46,7 +46,7 @@ namespace MatinGram.Application.Services.Users.Commands.UserSignup
                 #region --Save Image--
                 if (request.ImageFile != null)
                 {
-                    var upResult = request.ImageFile.UploadFile("Images/UserImages", _environment);
+                    var upResult = request.ImageFile.UploadFile("Images/UserImages/", _environment);
                     if (upResult.Status)
                     {
                         var newImage = new UserImage()

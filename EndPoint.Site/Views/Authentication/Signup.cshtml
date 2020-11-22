@@ -1,4 +1,4 @@
-﻿
+﻿@model MatinGram.ViewModels.ViewModels.Users.UserSignupViewModel
 @{
     ViewData["Title"] = "Signup";
     Layout = "~/Views/Shared/_LoginLayout.cshtml";
@@ -14,8 +14,9 @@
         <div class="container">
             <div class="col-md-12">
                 <div class="content">
-                    <h1 class="my-color">Create Account</h1>
-                    <div class="third-party">
+                    <h1 class="my-color">ایجاد حساب</h1>
+
+                    @*<div class="third-party">
                         <button class="btn item bg-blue">
                             <i class="material-icons">pages</i>
                         </button>
@@ -26,25 +27,44 @@
                             <i class="material-icons">whatshot</i>
                         </button>
                     </div>
-                    <p>or use your email for registration:</p>
-                    <form class="signup">
+                    <p>or use your email for registration:</p>*@
+
+                    <form class="signup" asp-action="Signup" method="post" enctype="multipart/form-data">
                         <div class="form-parent">
                             <div class="form-group">
-                                <input type="text" id="inputName" class="form-control" placeholder="Username" required>
+                                <input asp-for="MobileNumber" id="inputMobileNumber" class="form-control" placeholder="شماره موبایل" required>
+                                <span asp-validation-for="MobileNumber"></span>
                                 <button class="btn icon"><i class="material-icons">person_outline</i></button>
                             </div>
+
                             <div class="form-group">
-                                <input type="email" id="inputEmail" class="form-control" placeholder="Email Address" required>
-                                <button class="btn icon"><i class="material-icons">mail_outline</i></button>
+                                <input asp-for="Name" id="inputName" class="form-control" placeholder="نام شما" required>
+                                <span asp-validation-for="Name"></span>
+                                <button class="btn icon"><i class="material-icons">person_outline</i></button>
                             </div>
                         </div>
+
                         <div class="form-group">
-                            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                            <input asp-for="Password" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                            <span asp-validation-for="Password"></span>
                             <button class="btn icon"><i class="material-icons">lock_outline</i></button>
                         </div>
-                        <button type="submit" class="btn button" formaction="index-2.html">Sign Up</button>
+
+                        <div class="form-group">
+                            <input asp-for="ConfirmPassword" type="password" id="inputConfirmPassword" class="form-control" placeholder="Password" required>
+                            <span asp-validation-for="ConfirmPassword"></span>
+                            <button class="btn icon"><i class="material-icons">lock_outline</i></button>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="ImageFile"></label>
+                            <input  type="file" name="ImageFile" class="form-control form-control-file">
+                            <button class="btn icon"><i class="material-icons">lock_outline</i></button>
+                        </div>
+
+                        <button type="submit" class="btn button">ثبت نام</button>
                         <div class="callout">
-                            <span>Already a member? <a href="sign-in.html">Sign In</a></span>
+                            <span>قبلا وارد شدید؟ <a href="/Signin">ورود به حساب</a></span>
                         </div>
                     </form>
                 </div>

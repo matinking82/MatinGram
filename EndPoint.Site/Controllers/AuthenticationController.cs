@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MatinGram.ViewModels.ViewModels.Users;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,15 @@ namespace EndPoint.Site.Controllers
         {
             return View();
         }
-        
+
+        [HttpPost]
+        [Route("/Signup")]
+        public IActionResult Signup([Bind("MobileNumber,Name,Password,ConfirmPassword,ImageFile")] UserSignupViewModel user)
+        {
+            return View(user);
+        }
+
+
         [HttpGet]
         [Route("/Signin")]
         public IActionResult Signin()

@@ -16,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\MatinGram.Application\MatinGram.Application.csproj" />
     <ProjectReference Include="..\MatinGram.Persistace\MatinGram.Persistace.csproj" />
+    <ProjectReference Include="..\MatinGram.ViewModels\MatinGram.ViewModels.csproj" />
   </ItemGroup>
 
 </Project>

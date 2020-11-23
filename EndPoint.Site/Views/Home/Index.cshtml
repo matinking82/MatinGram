@@ -6,9 +6,10 @@
 
 <div class="col height-max chatroom-main">
 
-    <div class="col-head">
+    <div class="col-head" onclick="closeChat();">
         <img class="prof" src="~/ChatroomRefrences/img/avatar.png" alt="">
         <h4 class="name">Matin King</h4>
+        <i class="back" hidden>Back</i>
     </div>
 
     <div class="col-content ">
@@ -131,7 +132,7 @@
         <div class="messages height-max my-background">
 
 
-            <li>
+            <li Guid="1234">
                 <div class="avatar">
                     <div class="avatar-image">
                         <div class="status online"></div><img src="~/ChatroomRefrences/img/avatar-2.png">
@@ -328,3 +329,8 @@
     </div>
 
 </div>
+
+
+@section Scripts{
+    <script src="~/ChatroomRefrences/js/Main.js"></script>
+}

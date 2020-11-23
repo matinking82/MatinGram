@@ -30,6 +30,7 @@ function openChat(Guid) {
         BackButton.removeAttribute('hidden');
     }
 
+    loadChatroom(Guid);
 
 }
 
@@ -38,4 +39,9 @@ function closeChat() {
     chatList.style = '';
     chatroom.style = '';
     chatHead.style = '';
+}
+
+
+function loadChatroom(Guid) {
+    alert('Im Here');
 }

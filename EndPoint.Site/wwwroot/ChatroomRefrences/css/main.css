@@ -272,3 +272,38 @@ main.main {
 .user-panel * {
     direction: rtl;
 }
+
+
+.chatroom-main .col-head {
+    overflow: hidden;
+    margin: 0 !important;
+    background: linear-gradient(150deg, rgb(85, 165, 165), rgb(75, 143, 143) 0%, rgb(24, 83, 83));
+    cursor: pointer;
+    transition: linear-gradient 2s;
+}
+
+    .chatroom-main .col-head:hover {
+        background: linear-gradient(150deg, rgb(85, 165, 165), rgb(75, 143, 143) 50%, rgb(24, 83, 83));
+    }
+
+.chatroom-main {
+    padding: 0 !important;
+}
+
+    .chatroom-main .col-head .prof {
+        resize: both;
+        width: 60px;
+        height: 60px;
+        border-radius: 1000px;
+        display: block;
+        margin: 10px auto;
+        float: initial;
+    }
+
+    .chatroom-main .col-head .name {
+        display: block;
+        width: 50%;
+        text-align: center;
+        margin: 10px auto;
+        color: gold;
+    }

@@ -15,7 +15,7 @@ namespace MatinGram.Application.Services.Users.Commands.UserSignup
 {
     public interface IUserSignupService
     {
-        ResultDto<ResultUserSignup> Execute(RequestUserSignupDto request);
+        Task<ResultDto<ResultUserSignup>> Execute(RequestUserSignupDto request);
     }
 
     public class UserSignupService : IUserSignupService
@@ -27,70 +27,73 @@ namespace MatinGram.Application.Services.Users.Commands.UserSignup
             _environment = environment;
             _context = context;
         }
-        public ResultDto<ResultUserSignup> Execute(RequestUserSignupDto request)
+        public async Task<ResultDto<ResultUserSignup>> Execute(RequestUserSignupDto request)
         {
-            try
+            return await Task.Run(async () =>
             {
-                User newUser = new User()
+                try
                 {
-                    MobileNumber = request.MobileNumber,
-                    Name = request.Name,
-                    Password = request.Password.ToHashed(),
-                    InsertTime = DateTime.Now,
-                    LastOnline = DateTime.Now,
-                    UserInRole = UserInRole.User
-                };
-
-                _context.Users.Add(newUser);
-
-                #region --Save Image--
-                if (request.ImageFile != null)
-                {
-                    var upResult = request.ImageFile.UploadFile("Images/UserImages/", _environment);
-                    if (upResult.Status)
+                    User newUser = new User()
                     {
-                        var newImage = new UserImage()
+                        MobileNumber = request.MobileNumber,
+                        Name = request.Name,
+                        Password = await request.Password.ToHashedAsync(),
+                        InsertTime = DateTime.Now,
+                        LastOnline = DateTime.Now,
+                        UserInRole = UserInRole.User
+                    };
+
+                    await _context.Users.AddAsync(newUser);
+
+                    #region --Save Image--
+                    if (request.ImageFile != null)
+                    {
+                        var upResult = await request.ImageFile.UploadFileAsync("Images/UserImages/", _environment);
+                        if (upResult.Status)
                         {
-                            ImageName = upResult.FileNameAddress,
-                            User = newUser,
+                            var newImage = new UserImage()
+                            {
+                                ImageName = upResult.FileNameAddress,
+                                User = newUser,
+                                UserId = newUser.Id,
+                                InsertTime = DateTime.Now,
+                            };
+
+                            await _context.UserImages.AddAsync(newImage);
+                        }
+                        else
+                        {
+                            return new ResultDto<ResultUserSignup>()
+                            {
+                                Status = ServiceStatus.SaveFileError,
+                            };
+                        }
+                    }
+                    #endregion
+
+
+
+                    await _context.SaveChangesAsync();
+
+                    return new ResultDto<ResultUserSignup>()
+                    {
+                        Data = new ResultUserSignup()
+                        {
                             UserId = newUser.Id,
-                            InsertTime = DateTime.Now,
-                        };
+                        },
+                        Status = ServiceStatus.Success
+                    };
 
-                        _context.UserImages.Add(newImage);
-                    }
-                    else
-                    {
-                        return new ResultDto<ResultUserSignup>()
-                        {
-                            Status = Common.Enums.ServiceStatus.SaveFileError,
-                        };
-                    }
+
                 }
-                #endregion
-
-
-
-                _context.SaveChanges();
-
-                return new ResultDto<ResultUserSignup>()
+                catch (Exception)
                 {
-                    Data = new ResultUserSignup()
+                    return new ResultDto<ResultUserSignup>()
                     {
-                        UserId = newUser.Id,
-                    },
-                    Status = Common.Enums.ServiceStatus.Success
-                };
-
-
-            }
-            catch (Exception)
-            {
-                return new ResultDto<ResultUserSignup>()
-                {
-                    Status = Common.Enums.ServiceStatus.SystemError
-                };
-            }
+                        Status = ServiceStatus.SystemError
+                    };
+                }
+            });
         }
     }
 

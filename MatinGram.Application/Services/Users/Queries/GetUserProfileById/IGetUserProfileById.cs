@@ -12,7 +12,7 @@ namespace MatinGram.Application.Services.Users.Queries.GetUserProfileById
 {
     public interface IGetUserProfileById
     {
-        ResultDto<ResultGetUserProfileByIdDto> Execute(long UserId);
+        Task<ResultDto<ResultGetUserProfileByIdDto>> Execute(long UserId);
     }
 
     public class GetUserProfileById : IGetUserProfileById
@@ -22,48 +22,50 @@ namespace MatinGram.Application.Services.Users.Queries.GetUserProfileById
         {
             _context = context;
         }
-        public ResultDto<ResultGetUserProfileByIdDto> Execute(long UserId)
+        public async Task<ResultDto<ResultGetUserProfileByIdDto>> Execute(long UserId)
         {
-            try
+            return await Task.Run(async () =>
             {
-                var user = _context.Users
-                    .Include(u => u.UserImages)
-                    .FirstOrDefault(u => u.Id == UserId);
+                try
+                {
+                    var user = await _context.Users
+                        .Include(u => u.UserImages)
+                        .FirstOrDefaultAsync(u => u.Id == UserId);
 
-                if (user == null)
+                    if (user == null)
+                    {
+                        return new ResultDto<ResultGetUserProfileByIdDto>()
+                        {
+                            Status = ServiceStatus.NotFound,
+                        };
+                    }
+
+
+                    ResultGetUserProfileByIdDto Data = new ResultGetUserProfileByIdDto()
+                    {
+                        Bio = user.Bio,
+                        ImageName = user.UserImages.Count() > 0 ? user.UserImages.FirstOrDefault().ImageName : "/Images/UserImages/Default.png",
+                        Mobile = user.MobileNumber,
+                        Name = user.Name,
+                        UserId = user.Id,
+                        Username = user.Username,
+                    };
+
+                    return new()
+                    {
+                        Data = Data,
+                        Status = ServiceStatus.Success
+                    };
+
+                }
+                catch (Exception)
                 {
                     return new ResultDto<ResultGetUserProfileByIdDto>()
                     {
-                        Status = ServiceStatus.NotFound,
+                        Status = ServiceStatus.SystemError,
                     };
                 }
-
-
-                ResultGetUserProfileByIdDto Data = new ResultGetUserProfileByIdDto()
-                {
-                    Bio = user.Bio,
-                    ImageName = user.UserImages.Count() > 0 ? user.UserImages.First().ImageName : "/Images/UserImages/Default.png",
-                    Mobile = user.MobileNumber,
-                    Name = user.Name,
-                    UserId = user.Id,
-                    Username = user.Username,
-                };
-
-                return new()
-                {
-                    Data = Data,
-                    Status = ServiceStatus.Success
-                };
-
-
-            }
-            catch (Exception)
-            {
-                return new ResultDto<ResultGetUserProfileByIdDto>()
-                {
-                    Status = ServiceStatus.SystemError,
-                };
-            }
+            });
         }
     }
 

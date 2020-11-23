@@ -21,5 +21,22 @@ namespace MatinGram.Common.Utilities
             }
             return builder.ToString();
         }
+
+        public static async Task<string> ToHashedAsync(this string password)
+        {
+            return await Task.Run(() =>
+            {
+                using SHA256 sha256 = SHA256.Create();
+                byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+                StringBuilder builder = new StringBuilder();
+
+                foreach (var i in bytes)
+                {
+                    builder.Append(i.ToString("x2"));
+                }
+                return builder.ToString();
+            });
+        }
     }
 }
+

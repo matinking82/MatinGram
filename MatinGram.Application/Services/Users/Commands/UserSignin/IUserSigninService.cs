@@ -2,6 +2,7 @@
 using MatinGram.Common.Dto;
 using MatinGram.Common.Enums;
 using MatinGram.Common.Utilities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace MatinGram.Application.Services.Users.Commands.UserSignin
 {
     public interface IUserSigninService
     {
-        ResultDto<ResultUserSignin> Execute(RequestUserSigninDto request);
+        Task<ResultDto<ResultUserSignin>> Execute(RequestUserSigninDto request);
     }
 
     public class UserSigninService : IUserSigninService
@@ -22,42 +23,43 @@ namespace MatinGram.Application.Services.Users.Commands.UserSignin
         {
             _context = context;
         }
-        public ResultDto<ResultUserSignin> Execute(RequestUserSigninDto request)
+        public async Task<ResultDto<ResultUserSignin>> Execute(RequestUserSigninDto request)
         {
-            try
+            return await Task.Run(async () =>
             {
-                var user = _context.Users
-                    .FirstOrDefault(u => u.MobileNumber == request.MobileNumber && u.Password == request.Password.ToHashed());
+                try
+                {
+                    var user = await _context.Users
+                        .FirstOrDefaultAsync(u => u.MobileNumber == request.MobileNumber && u.Password == request.Password.ToHashed());
 
-                if (user == null)
+                    if (user == null)
+                    {
+                        return new ResultDto<ResultUserSignin>()
+                        {
+                            Status = ServiceStatus.NotFound,
+                        };
+                    }
+
+
+                    return new ResultDto<ResultUserSignin>()
+                    {
+                        Status = ServiceStatus.Success,
+                        Data = new ResultUserSignin()
+                        {
+                            Id = user.Id,
+                            Name = user.Name,
+                            UserInRole = user.UserInRole,
+                        }
+                    };
+                }
+                catch (Exception)
                 {
                     return new ResultDto<ResultUserSignin>()
                     {
-                        Status = ServiceStatus.NotFound,
+                        Status = ServiceStatus.SystemError
                     };
-                }
-
-
-                return new ResultDto<ResultUserSignin>()
-                {
-                    Status = ServiceStatus.Success,
-                    Data = new ResultUserSignin()
-                    {
-                        Id = user.Id,
-                        Name = user.Name,
-                        UserInRole = user.UserInRole,
-                    }
                 };
-
-
-            }
-            catch (Exception)
-            {
-                return new ResultDto<ResultUserSignin>()
-                {
-                    Status = ServiceStatus.SystemError
-                };
-            };
+            });
         }
     }
 }

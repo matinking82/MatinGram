@@ -307,3 +307,27 @@ main.main {
         margin: 10px auto;
         color: gold;
     }
+
+    .chatroom-main .col-head .back {
+        position: absolute;
+        color: cyan;
+        font-size: 30px;
+        right: 0;
+        top: 0;
+        margin: 20px;
+        padding: 20px;
+    }
+
+        .chatroom-main .col-head .back:hover {
+            background-color: rgb(16, 119, 119);
+        }
+
+.search-form input {
+    display: block;
+    height: 40px;
+    width: 90%;
+    margin: 10px auto;
+    direction: rtl;
+    border-radius: 10px;
+    padding: 10px;
+}

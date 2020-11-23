@@ -37,7 +37,7 @@ namespace EndPoint.Site.Controllers
 
         [HttpPost]
         [Route("/Signup")]
-        public IActionResult Signup([Bind("MobileNumber,Name,Password,ConfirmPassword,ImageFile")] UserSignupViewModel user)
+        public async Task<IActionResult> Signup([Bind("MobileNumber,Name,Password,ConfirmPassword,ImageFile")] UserSignupViewModel user)
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -59,12 +59,12 @@ namespace EndPoint.Site.Controllers
                     Name = user.Name,
                     Password = user.Password
                 };
-                var result = _usersFacad.UserSignupService.Execute(request);
+                var result = await _usersFacad.UserSignupService.Execute(request);
 
                 switch (result.Status)
                 {
                     case ServiceStatus.Success:
-                        HttpContext.LoginToSite(result.Data.UserId, user.MobileNumber, user.Name, UserInRole.User);
+                        await HttpContext.LoginToSiteAsync(result.Data.UserId, user.MobileNumber, user.Name, UserInRole.User);
                         ViewBag.Message = "حساب شما با موفقیت ایجاد شد";
                         break;
                     case ServiceStatus.SystemError:
@@ -102,7 +102,7 @@ namespace EndPoint.Site.Controllers
 
         [HttpPost]
         [Route("/Signin")]
-        public IActionResult Signin([Bind("MobileNumber,Password")] UserSigninViewModel user)
+        public async Task<IActionResult> Signin([Bind("MobileNumber,Password")] UserSigninViewModel user)
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -116,14 +116,14 @@ namespace EndPoint.Site.Controllers
                     MobileNumber = user.MobileNumber,
                     Password = user.Password
                 };
-                var result = _usersFacad.UserSigninService.Execute(request);
+                var result = await _usersFacad.UserSigninService.Execute(request);
 
 
 
                 switch (result.Status)
                 {
                     case ServiceStatus.Success:
-                        HttpContext.LoginToSite(result.Data.Id, user.MobileNumber, result.Data.Name, result.Data.UserInRole);
+                        await HttpContext.LoginToSiteAsync(result.Data.Id, user.MobileNumber, result.Data.Name, result.Data.UserInRole);
                         ViewBag.Message = "باموفقیت وارد شدید";
                         break;
                     case ServiceStatus.SystemError:
@@ -145,11 +145,11 @@ namespace EndPoint.Site.Controllers
 
         [HttpGet]
         [Route("/Signout")]
-        public IActionResult Signout()
+        public async Task<IActionResult> Signout()
         {
             if (User.Identity.IsAuthenticated)
             {
-                HttpContext.SignoutSite();
+                await HttpContext.SignoutSiteAsync();
             }
 
             return Redirect("/");

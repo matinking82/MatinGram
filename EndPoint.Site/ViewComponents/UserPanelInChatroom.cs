@@ -18,12 +18,11 @@ namespace EndPoint.Site.ViewComponents
         }
 
 
-        public IViewComponentResult Invoke()
+        public async Task<IViewComponentResult> InvokeAsync()
         {
-
             long UserId = HttpContext.User.GetUserId();
 
-            var result = _usersFacad.GetUserProfileById.Execute(UserId);
+            var result = await _usersFacad.GetUserProfileById.Execute(UserId);
 
             return View(viewName: "UserPanelInChatroom",model: new UserProfileViewModel()
             {

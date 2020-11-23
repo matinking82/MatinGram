@@ -2,6 +2,7 @@
 using MatinGram.Application.Interfaces.FacadPatterns;
 using MatinGram.Application.Services.Users.Commands.UserSignin;
 using MatinGram.Application.Services.Users.Commands.UserSignup;
+using MatinGram.Application.Services.Users.Queries.GetUserProfileById;
 using Microsoft.AspNetCore.Hosting;
 using System;
 using System.Collections.Generic;
@@ -48,6 +49,20 @@ namespace MatinGram.Application.Services.Users.FacadPattern
 
                 return _userSigninService;
             }
+        }
+
+        private IGetUserProfileById _getUserProfileById;
+        public IGetUserProfileById GetUserProfileById 
+        { 
+            get 
+            {
+                if (_getUserProfileById == null)
+                {
+                    _getUserProfileById = new GetUserProfileById(_context);
+                }
+
+                return _getUserProfileById;
+            } 
         }
 
     }

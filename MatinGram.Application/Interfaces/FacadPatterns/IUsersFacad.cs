@@ -1,5 +1,6 @@
 ﻿using MatinGram.Application.Services.Users.Commands.UserSignin;
 using MatinGram.Application.Services.Users.Commands.UserSignup;
+using MatinGram.Application.Services.Users.Queries.GetUserProfileById;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,9 @@ namespace MatinGram.Application.Interfaces.FacadPatterns
     {
         IUserSignupService UserSignupService { get; }
         IUserSigninService UserSigninService { get; }
+
+
+        IGetUserProfileById GetUserProfileById { get; }
+
     }
 }

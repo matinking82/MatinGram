@@ -7,16 +7,11 @@ var chatList = document.querySelector('.main .col-left');
 
 var BackButton = document.querySelector('.chatroom-main .col-head .back');
 
-
 GetList().then(
     function (value) {
     }, function (err) {
     }
 )
-
-
-
-
 
 function openChat(Guid) {
 
@@ -30,17 +25,18 @@ function openChat(Guid) {
 
         BackButton.removeAttribute('hidden');
     }
-
-    loadChatroom(Guid);
+    if (Guid != null) {
+        loadChatroom(Guid);
+    }
 
 }
-
 
 function closeChat() {
     chatList.style = '';
     chatroom.style = '';
     chatHead.style = '';
 }
+
 async function GetList() {
     $.ajax({
         contentType: 'application/x-www-form-urlencoded',
@@ -62,8 +58,6 @@ async function GetList() {
 }
 
 async function BuildChatroomList(data) {
-    //TODO
-    debugger;
     for (var i = 0; i < data.length; i++) {
         var item = data[i];
 
@@ -108,4 +102,62 @@ async function BuildChatroomList(data) {
 
 function loadChatroom(Guid) {
     alert('Im Here');
+}
+
+async function LoadPV(username) {
+    $.ajax({
+        contentType: 'application/x-www-form-urlencoded',
+        type: "GET",
+        url: "/OpenPV/" + username,
+        success: function (data) {
+            if (data.status == 0) {
+                BuildPV(data.data);
+            }
+            else {
+
+                console.log('Failed To Get List!');
+            }
+        },
+        error: function (request, status, error) {
+            console.log('Failed To Get List!');
+        }
+    });
+}
+
+async function BuildPV(data) {
+
+    var ChatroomImage = document.querySelector('.col-head .prof');
+    var ChatroomName = document.querySelector('.col-head .name');
+
+    ChatroomImage.setAttribute('src', data.imageName);
+    ChatroomName.innerHTML = data.chatroomName
+    debugger;
+
+    var ChatsBox = document.querySelector('.message .grid-message');
+
+    for (var i = 0; i < data.messages.length; i++) {
+
+        var item = data.messages[i];
+
+        var outdiv = document.createElement('div');
+        var indiv = document.createElement('div');
+        var inP = document.createElement('p');
+
+        if (item.isMe) {
+            outdiv.setAttribute('class', 'col-message-sent');
+            indiv.setAttribute('class', 'message-sent');
+        } else {
+            outdiv.setAttribute('class', 'col-message-received');
+            indiv.setAttribute('class', 'message-received');
+        }
+
+        inP.innerHTML = item.text;
+
+
+        indiv.appendChild(inP);
+        outdiv.appendChild(indiv);
+
+        ChatsBox.appendChild(outdiv);
+    }
+
 }

@@ -18,8 +18,18 @@ namespace EndPoint.Site.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string? Username, Guid? Guid)
         {
+            if (Guid != null)
+            {
+                ViewBag.Guid = Guid;
+            }
+            else if (Username != null)
+            {
+                ViewBag.Username = Username;
+            }
+
+
             return View();
         }
 

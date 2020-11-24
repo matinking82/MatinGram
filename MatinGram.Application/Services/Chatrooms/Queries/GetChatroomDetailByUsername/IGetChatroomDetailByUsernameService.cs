@@ -30,6 +30,7 @@ namespace MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByUs
                 try
                 {
                     var targetUser = await _context.Users
+                    .Include(u=> u.UserImages)
                     .Include(u => u.UserInChatrooms)
                     .ThenInclude(u => u.Chatroom)
                     .ThenInclude(c => c.Messages)
@@ -48,8 +49,8 @@ namespace MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByUs
                     var Data = new ChatroomDetailByUsernameDto()
                     {
                         ChatroomName = targetUser.Name,
-                        ImageName = (targetUser.UserImages != null) ? targetUser.UserImages.FirstOrDefault().ImageName : "/Images/UserImages/Default.png",
-                        Messages = new List<MessageDto>()
+                        ImageName = (targetUser.UserImages != null) ? targetUser.UserImages.FirstOrDefault().ImageName 
+                        : "/Images/UserImages/Default.png",
                     };
 
                     if (PVChat != null)

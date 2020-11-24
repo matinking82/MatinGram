@@ -30,6 +30,8 @@ namespace MatinGram.Domain.Entities.Users
         [Required]
         public string Password { get; set; }
 
+        public string HashKey { get; set; }
+
         [MinLength(3)]
         [MaxLength(30)]
         public string Username { get; set; }

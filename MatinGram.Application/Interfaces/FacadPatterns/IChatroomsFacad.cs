@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomsByUserId;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,6 @@ namespace MatinGram.Application.Interfaces.FacadPatterns
 {
     public interface IChatroomsFacad
     {
-
+        IGetChatroomsByUserIdService GetChatroomsByUserIdService { get; }
     }
 }

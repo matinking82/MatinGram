@@ -1,5 +1,6 @@
 ﻿using MatinGram.Application.Interfaces;
 using MatinGram.Application.Interfaces.FacadPatterns;
+using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomsByUserId;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,22 @@ namespace MatinGram.Application.Services.Chatrooms.FacadPattern
         {
             _context = context;
         }
+
+
+        private IGetChatroomsByUserIdService _getChatroomsByUserIdService;
+        public IGetChatroomsByUserIdService GetChatroomsByUserIdService 
+        { 
+            get 
+            {
+                if (_getChatroomsByUserIdService == null)
+                {
+                    _getChatroomsByUserIdService = new GetChatroomsByUserIdService(_context);
+                }
+
+                return _getChatroomsByUserIdService;
+            } 
+        }
+
 
     }
 }

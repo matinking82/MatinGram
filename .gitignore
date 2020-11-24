@@ -339,3 +339,4 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 /EndPoint.Site/wwwroot/Images/UserImages
+/EndPoint.Site/wwwroot/Images/ChatroomImages/Default.png

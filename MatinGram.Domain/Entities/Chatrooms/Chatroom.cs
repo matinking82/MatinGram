@@ -15,6 +15,8 @@ namespace MatinGram.Domain.Entities.Chatrooms
     {
         public int Id { get; set; }
 
+        public string Name { get; set; }
+
         public ChatroomType ChatroomType { get; set; }
 
         public Guid Guid { get; set; }

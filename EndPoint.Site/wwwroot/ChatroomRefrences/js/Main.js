@@ -35,6 +35,7 @@ function closeChat() {
     chatList.style = '';
     chatroom.style = '';
     chatHead.style = '';
+    BackButton.setAttribute('hidden','');
 }
 
 async function GetList() {

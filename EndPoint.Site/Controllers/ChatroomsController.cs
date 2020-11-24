@@ -21,7 +21,6 @@ namespace EndPoint.Site.Controllers
 
             var UserId = User.GetUserId();
 
-
             var result = await _chatroomsFacad.GetChatroomsByUserIdService.Execute(UserId);
 
             return Json(result);

@@ -20,7 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\Chatrooms\Commands\" />
     <Folder Include="Services\Messages\Commands\" />
     <Folder Include="Services\Messages\Queries\" />
   </ItemGroup>

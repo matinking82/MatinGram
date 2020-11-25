@@ -350,3 +350,25 @@ main.main {
 .btn-send:hover{
     color:deepskyblue;
 }
+
+.message-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 100px;
+    margin-bottom: 10px;
+    border: 1px solid rgb(56, 98, 233);
+}
+
+.message-name {
+    font-size: 15px;
+    color: #5c5555;
+}
+
+    .message-name:hover {
+        color: #221c1c;
+    }
+
+.message-received hr {
+    margin-top: 2px;
+    margin-bottom: 10px;
+}

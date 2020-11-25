@@ -7,6 +7,10 @@ var chatList = document.querySelector('.main .col-left');
 var BackButton = document.querySelector('.chatroom-main .col-head .back');
 var btnSend = document.querySelector('.btn-send');
 var btnCamera = document.querySelector('.btn-camera');
+var ChtroomsList = document.querySelector('div.messages');
+var ChatsBox = document.querySelector('.message .grid-message');
+var ChatroomImage = document.querySelector('.col-head .prof');
+var ChatroomName = document.querySelector('.col-head .name');
 
 btnSend.addEventListener('click', btnSend_Click);
 btnCamera.addEventListener('click', btnCamera_Click);
@@ -20,25 +24,7 @@ GetList().then(
     }
 )
 
-function openChat(Guid) {
-
-    if (window.window.innerWidth <= 768) {
-
-        chatList.style = 'display:none;';
-
-        chatroom.style = 'display: block;overflow-y:scroll;';
-        chatHead.style = 'position:sticky;top:0px;z-index:10;';
-        BackButton.addEventListener('click', closeChat);
-
-        BackButton.removeAttribute('hidden');
-    }
-    if (Guid != null) {
-        loadChatroom(Guid);
-    }
-
-}
-
-function closeChat() {
+async function closeChat() {
     chatList.style = '';
     chatroom.style = '';
     chatHead.style = '';
@@ -70,48 +56,140 @@ async function BuildChatroomList(data) {
     for (var i = 0; i < data.length; i++) {
         var item = data[i];
 
-
-        var li = document.createElement('li');
-        var outdiv = document.createElement('div');
-        var indiv = document.createElement('div');
-        var h3 = document.createElement('h3');
-        var p = document.createElement('p');
-        var img = document.createElement('img');
-
-
-        li.setAttribute("Guid", item.guid);
-        outdiv.setAttribute("class", "avatar");
-        indiv.setAttribute("class", "avatar-image");
-        img.setAttribute("src", item.imageName);
-        h3.innerHTML = item.chatroomName;
-        p.innerHTML = item.lastMessage
-
-
-        indiv.appendChild(img);
-        outdiv.appendChild(indiv);
-        li.appendChild(outdiv);
-        li.appendChild(h3);
-        li.appendChild(p);
-
-        document.querySelector('div.messages').appendChild(li);
-    }
-
-
-
-    var messages = document.querySelectorAll('div.messages li');
-    for (let i = 0; i < messages.length; i++) {
-        const element = messages[i];
-
-        element.addEventListener('click', function () {
-            var Guid = element.getAttribute('Guid');
-            openChat(Guid);
-        });
+        AddChatroom(item);
     }
 }
 
-function loadChatroom(Guid) {
-    alert('Im Here');
-    ChatroomGuid = Guid;
+async function AddChatroom(item) {
+
+    var li = document.createElement('li');
+    var outdiv = document.createElement('div');
+    var indiv = document.createElement('div');
+    var h3 = document.createElement('h3');
+    var p = document.createElement('p');
+    var img = document.createElement('img');
+
+
+    li.setAttribute("Guid", item.guid);
+    outdiv.setAttribute("class", "avatar");
+    indiv.setAttribute("class", "avatar-image");
+    img.setAttribute("src", item.imageName);
+    h3.innerHTML = item.chatroomName;
+    p.innerHTML = item.lastMessage
+
+
+    indiv.appendChild(img);
+    outdiv.appendChild(indiv);
+    li.appendChild(outdiv);
+    li.appendChild(h3);
+    li.appendChild(p);
+
+    li.addEventListener('click', function () {
+        var Guid = li.getAttribute('guid');
+        openChat(Guid);
+    });
+
+
+    ChtroomsList.appendChild(li);
+}
+
+async function openChat(Guid) {
+
+    if (window.window.innerWidth <= 768) {
+
+        chatList.style = 'display:none;';
+
+        chatroom.style = 'display: block;overflow-y:scroll;';
+        chatHead.style = 'position:sticky;top:0px;z-index:10;';
+        BackButton.addEventListener('click', closeChat);
+
+        BackButton.removeAttribute('hidden');
+    }
+    if (Guid != null) {
+        loadChatroom(Guid);
+    }
+
+}
+
+async function loadChatroom(Guid) {
+
+    $.ajax({
+        contentType: 'application/x-www-form-urlencoded',
+        type: "GET",
+        url: "/OpenChat/" + Guid,
+        success: function (data) {
+            if (data.status == 0) {
+                BuildChat(data.data);
+            }
+            else {
+
+                console.log('Failed To Get List!');
+            }
+        },
+        error: function (request, status, error) {
+            console.log('Failed To Get List!');
+        }
+    });
+
+}
+
+async function BuildChat(data) {
+
+    ChatroomGuid = data.chatroomGuid;
+    ChatroomImage.setAttribute('src', data.imageName);
+    ChatroomName.innerHTML = data.chatroomName
+
+    for (var i = 0; i < data.messages.length; i++) {
+        var item = data.messages[i];
+
+        switch (data.type) {
+            case 0:
+                AddMessagePV(item);
+                break;
+
+            case 1:
+                AddMessageChat(item);
+                break;
+
+            default:
+                console.log("failed");
+                break;
+        }
+    }
+}
+
+async function AddMessageChat(item) {
+
+    var outdiv = document.createElement('div');
+    var indiv = document.createElement('div');
+    var inP = document.createElement('p');
+    var img = document.createElement('img');
+    var span = document.createElement('span');
+    var hr = document.createElement('hr');
+
+    if (item.isMe) {
+        outdiv.setAttribute('class', 'col-message-sent');
+        indiv.setAttribute('class', 'message-sent');
+    } else {
+        outdiv.setAttribute('class', 'col-message-received');
+        indiv.setAttribute('class', 'message-received');
+    }
+
+    img.src = item.imageName;
+    img.setAttribute('class', 'message-image');
+
+    span.innerHTML = item.senderName;
+    span.setAttribute('class', 'message-name');
+
+    inP.innerHTML = item.text;
+
+    indiv.appendChild(img);
+    indiv.appendChild(span);
+    indiv.appendChild(hr);
+    indiv.appendChild(inP);
+    outdiv.appendChild(indiv);
+
+    ChatsBox.appendChild(CreateChatMessage(outdiv));
 }
 
 async function LoadPV(username) {
@@ -136,51 +214,49 @@ async function LoadPV(username) {
 }
 
 async function BuildPV(data) {
-   
+
     ChatroomGuid = data.chatroomGuid;
-
-    var ChatroomImage = document.querySelector('.col-head .prof');
-    var ChatroomName = document.querySelector('.col-head .name');
-
     ChatroomImage.setAttribute('src', data.imageName);
     ChatroomName.innerHTML = data.chatroomName
-
-    var ChatsBox = document.querySelector('.message .grid-message');
 
     if (data.messages != null) {
         for (var i = 0; i < data.messages.length; i++) {
 
             var item = data.messages[i];
 
-            var outdiv = document.createElement('div');
-            var indiv = document.createElement('div');
-            var inP = document.createElement('p');
-
-            if (item.isMe) {
-                outdiv.setAttribute('class', 'col-message-sent');
-                indiv.setAttribute('class', 'message-sent');
-            } else {
-                outdiv.setAttribute('class', 'col-message-received');
-                indiv.setAttribute('class', 'message-received');
-            }
-
-            inP.innerHTML = item.text;
-
-
-            indiv.appendChild(inP);
-            outdiv.appendChild(indiv);
-
-            ChatsBox.appendChild(outdiv);
+            AddMessagePV(item);
         }
     }
 
 }
 
+async function AddMessagePV(item) {
+
+    var outdiv = document.createElement('div');
+    var indiv = document.createElement('div');
+    var inP = document.createElement('p');
+
+    if (item.isMe) {
+        outdiv.setAttribute('class', 'col-message-sent');
+        indiv.setAttribute('class', 'message-sent');
+    } else {
+        outdiv.setAttribute('class', 'col-message-received');
+        indiv.setAttribute('class', 'message-received');
+    }
+
+    inP.innerHTML = item.text;
+
+
+    indiv.appendChild(inP);
+    outdiv.appendChild(indiv);
+
+    ChatsBox.appendChild(outdiv);
+}
 
 async function btnSend_Click() {
-    debugger;
 
-    if ((ChatroomGuid == null || ChatroomGuid =="00000000-0000-0000-0000-000000000000") && targetUsername != null) {
+
+    if ((ChatroomGuid == null || ChatroomGuid == "00000000-0000-0000-0000-000000000000") && targetUsername != null) {
         //Create Chatroom
         //Get Guid
         $.ajax({
@@ -204,7 +280,15 @@ async function btnSend_Click() {
 
 async function SendMessage() {
     alert(ChatroomGuid);
-    //TODO :
+
+    var TextArea = document.querySelector('.txt-message');
+    if (TextArea.innerHTML !== '') {
+
+        var message = TextArea.innerHTML;
+        TextArea.innerHTML = '';
+
+        alert(message);
+    }
 }
 
 async function btnCamera_Click() {

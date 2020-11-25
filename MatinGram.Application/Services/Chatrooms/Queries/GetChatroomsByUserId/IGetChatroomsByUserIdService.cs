@@ -30,10 +30,19 @@ namespace MatinGram.Application.Services.Chatrooms.Queries.GetChatroomsByUserId
                 try
                 {
                     var user = await _context.Users
+                    //TODO::::::::::[Find Better Way]::::::::::::::::::::
+                    /**/.Include(c => c.UserInChatrooms)
+                    /**/.ThenInclude(u => u.Chatroom)
+                    /**/.ThenInclude(c => c.ChatroomImages)
+                    //TODO::::::::::[Find Better Way]::::::::::::::::::::
+
                     .Include(c => c.UserInChatrooms)
                     .ThenInclude(u => u.Chatroom)
-                    .ThenInclude(c => c.Creator)
+                    .ThenInclude(c => c.UserInChatrooms)
+                    .ThenInclude(u => u.User)
+                    .ThenInclude(u => u.UserImages)
                     .FirstOrDefaultAsync(u => u.Id == UserId);
+
 
                     if (user == null)
                     {
@@ -54,17 +63,16 @@ namespace MatinGram.Application.Services.Chatrooms.Queries.GetChatroomsByUserId
                         //check is pv 
                         ImageName = (u.Chatroom.ChatroomType == ChatroomType.PV) ?
                         //pv
-                        ((GetUser(UserId, u).UserImages !=null) ?GetUser(UserId, u).UserImages.FirstOrDefault().ImageName
+                        ((GetUser(UserId, u).UserImages != null) ? GetUser(UserId, u).UserImages.FirstOrDefault().ImageName
                         : "/images/UserImages/Default.png")
                         //not pv
-                        :((u.Chatroom.ChatroomImages!=null)? u.Chatroom.ChatroomImages.FirstOrDefault().ImageName 
-                         :"/images/ChatroomImages/Default.png") ,
+                        : ((u.Chatroom.ChatroomImages != null) ? u.Chatroom.ChatroomImages.FirstOrDefault().ImageName
+                         : "/images/ChatroomImages/Default.png"),
 
-                        LastMessage = u.Chatroom.Messages.LastOrDefault().Text,
-                        LastMessageTime = u.Chatroom.Messages.LastOrDefault().SendDate,
+                        LastMessage = u.Chatroom.Messages?.LastOrDefault()?.Text,
+                        LastMessageTime = u.Chatroom.Messages?.LastOrDefault()?.SendDate,
                         Guid = u.Chatroom.Guid
                     });
-
 
                     return new ResultDto<IEnumerable<ResultGetChatroomsByUserId>>()
                     {
@@ -95,7 +103,7 @@ namespace MatinGram.Application.Services.Chatrooms.Queries.GetChatroomsByUserId
         public string LastMessage { get; set; }
         public string ChatroomName { get; set; }
         public string ImageName { get; set; }
-        public DateTime LastMessageTime { get; set; }
+        public DateTime? LastMessageTime { get; set; }
         public Guid Guid { get; set; }
     }
 }

@@ -30,10 +30,15 @@ namespace MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByUs
                 try
                 {
                     var targetUser = await _context.Users
-                    .Include(u=> u.UserImages)
+                    .Include(u => u.UserImages)
                     .Include(u => u.UserInChatrooms)
                     .ThenInclude(u => u.Chatroom)
                     .ThenInclude(c => c.Messages)
+                    //TODO::::::::::[Find Better Way]::::::::::::::::::::
+                    /**/.Include(u => u.UserInChatrooms)
+                    /**/.ThenInclude(u => u.Chatroom)
+                    /**/.ThenInclude(c=> c.UserInChatrooms)
+                    //TODO:::::::::::::::::::::::::::::::::::::::::::::::
                     .FirstOrDefaultAsync(u => u.Username.ToLower() == TargetUsername.ToLower());
 
                     if (targetUser == null)

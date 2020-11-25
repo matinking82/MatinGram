@@ -23,7 +23,7 @@ namespace MatinGram.Domain.Entities.Chatrooms
 
 
         public virtual User Creator { get; set; }
-        public long CreatorId { get; set; }
+        public long? CreatorId { get; set; }
 
 
         public virtual IEnumerable<ChatroomImage> ChatroomImages { get; set; }

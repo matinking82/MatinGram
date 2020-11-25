@@ -1,4 +1,5 @@
 ﻿using MatinGram.Application.Services.Chatrooms.Commands.CreateNewChatroomPV;
+using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByGuid;
 using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByUsername;
 using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomsByUserId;
 using System;
@@ -13,6 +14,7 @@ namespace MatinGram.Application.Interfaces.FacadPatterns
     {
         IGetChatroomsByUserIdService GetChatroomsByUserIdService { get; }
         IGetChatroomDetailByUsernameService GetChatroomDetailByUsernameService { get; }
+        IGetChatroomDetailByGuid GetChatroomDetailByGuid { get; }
 
         ICreateNewChatroomPVService CreateNewChatroomPVService { get; }
     }

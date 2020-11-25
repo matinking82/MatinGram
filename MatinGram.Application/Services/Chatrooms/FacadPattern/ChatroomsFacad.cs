@@ -1,6 +1,7 @@
 ﻿using MatinGram.Application.Interfaces;
 using MatinGram.Application.Interfaces.FacadPatterns;
 using MatinGram.Application.Services.Chatrooms.Commands.CreateNewChatroomPV;
+using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByGuid;
 using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByUsername;
 using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomsByUserId;
 using System;
@@ -60,6 +61,21 @@ namespace MatinGram.Application.Services.Chatrooms.FacadPattern
                 }
 
                 return _createNewChatroomPVService;
+            } 
+        }
+
+
+        private IGetChatroomDetailByGuid _getChatroomDetailByGuid;
+        public IGetChatroomDetailByGuid GetChatroomDetailByGuid 
+        { 
+            get 
+            {
+                if (_getChatroomDetailByGuid == null)
+                {
+                    _getChatroomDetailByGuid = new GetChatroomDetailByGuid(_context);
+                }
+
+                return _getChatroomDetailByGuid;
             } 
         }
     }

@@ -4,10 +4,15 @@ messagesBox.scrollTo(0, 100000010000001000);
 var chatroom = document.querySelector('.chatroom-main');
 var chatHead = document.querySelector('.chatroom-main .col-head');
 var chatList = document.querySelector('.main .col-left');
-
 var BackButton = document.querySelector('.chatroom-main .col-head .back');
+var btnSend = document.querySelector('.btn-send');
+var btnCamera = document.querySelector('.btn-camera');
+
+btnSend.addEventListener('click', btnSend_Click);
+btnCamera.addEventListener('click', btnCamera_Click);
 
 var ChatroomGuid;
+var targetUsername;
 
 GetList().then(
     function (value) {
@@ -117,6 +122,7 @@ async function LoadPV(username) {
         success: function (data) {
             if (data.status == 0) {
                 BuildPV(data.data);
+                targetUsername = username;
             }
             else {
 
@@ -130,6 +136,8 @@ async function LoadPV(username) {
 }
 
 async function BuildPV(data) {
+   
+    ChatroomGuid = data.chatroomGuid;
 
     var ChatroomImage = document.querySelector('.col-head .prof');
     var ChatroomName = document.querySelector('.col-head .name');
@@ -138,31 +146,67 @@ async function BuildPV(data) {
     ChatroomName.innerHTML = data.chatroomName
 
     var ChatsBox = document.querySelector('.message .grid-message');
-    ChatroomGuid = data.chatrooomGuid;
 
-    for (var i = 0; i < data.messages.length; i++) {
+    if (data.messages != null) {
+        for (var i = 0; i < data.messages.length; i++) {
 
-        var item = data.messages[i];
+            var item = data.messages[i];
 
-        var outdiv = document.createElement('div');
-        var indiv = document.createElement('div');
-        var inP = document.createElement('p');
+            var outdiv = document.createElement('div');
+            var indiv = document.createElement('div');
+            var inP = document.createElement('p');
 
-        if (item.isMe) {
-            outdiv.setAttribute('class', 'col-message-sent');
-            indiv.setAttribute('class', 'message-sent');
-        } else {
-            outdiv.setAttribute('class', 'col-message-received');
-            indiv.setAttribute('class', 'message-received');
+            if (item.isMe) {
+                outdiv.setAttribute('class', 'col-message-sent');
+                indiv.setAttribute('class', 'message-sent');
+            } else {
+                outdiv.setAttribute('class', 'col-message-received');
+                indiv.setAttribute('class', 'message-received');
+            }
+
+            inP.innerHTML = item.text;
+
+
+            indiv.appendChild(inP);
+            outdiv.appendChild(indiv);
+
+            ChatsBox.appendChild(outdiv);
         }
-
-        inP.innerHTML = item.text;
-
-
-        indiv.appendChild(inP);
-        outdiv.appendChild(indiv);
-
-        ChatsBox.appendChild(outdiv);
     }
 
+}
+
+
+async function btnSend_Click() {
+    debugger;
+
+    if ((ChatroomGuid == null || ChatroomGuid =="00000000-0000-0000-0000-000000000000") && targetUsername != null) {
+        //Create Chatroom
+        //Get Guid
+        $.ajax({
+            contentType: 'application/x-www-form-urlencoded',
+            type: "POST",
+            url: "/CreatePV/" + targetUsername,
+            success: function (data) {
+                ChatroomGuid = data.data;
+
+                SendMessage()
+            },
+            error: function (request, status, error) {
+                console.log('Failed To Get List!');
+            }
+        });
+    } else {
+        SendMessage();
+    }
+
+}
+
+async function SendMessage() {
+    alert(ChatroomGuid);
+    //TODO :
+}
+
+async function btnCamera_Click() {
+    alert("Clicked");
 }

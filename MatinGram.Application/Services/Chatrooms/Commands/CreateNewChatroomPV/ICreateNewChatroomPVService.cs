@@ -31,7 +31,7 @@ namespace MatinGram.Application.Services.Chatrooms.Commands.CreateNewChatroomPV
                 {
 
                     var targetUser = await _context.Users
-                        .FirstOrDefaultAsync(u => u.Username == TargetUsername);
+                        .FirstOrDefaultAsync(u => u.Username.ToLower() == TargetUsername.ToLower());
 
                     var myUser = await _context.Users.FindAsync(MyUserId);
 
@@ -48,9 +48,12 @@ namespace MatinGram.Application.Services.Chatrooms.Commands.CreateNewChatroomPV
                         .Where(c => c.ChatroomType == Common.Enums.ChatroomType.PV)
                         .FirstOrDefaultAsync(c => c.UserInChatrooms.Any(u => u.UserId == targetUser.Id) && c.UserInChatrooms.Any(u => u.UserId == MyUserId));
 
-                    Guid Data = oldChatroom.Guid;
-
-                    if (oldChatroom == null)
+                    Guid Data = new Guid();
+                    if (oldChatroom != null)
+                    {
+                        Data = oldChatroom.Guid;
+                    }
+                    else
                     {
 
                         Chatroom newChatroom = new Chatroom()
@@ -58,9 +61,10 @@ namespace MatinGram.Application.Services.Chatrooms.Commands.CreateNewChatroomPV
                             ChatroomType = Common.Enums.ChatroomType.PV,
                             Guid = Guid.NewGuid(),
                             InsertTime = DateTime.Now,
-
+                            
                         };
                         await _context.Chatrooms.AddAsync(newChatroom);
+                        await _context.SaveChangesAsync();
 
                         UserInChatroom myUserInChatroom = new UserInChatroom()
                         {

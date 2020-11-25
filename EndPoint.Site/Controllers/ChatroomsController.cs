@@ -45,5 +45,22 @@ namespace EndPoint.Site.Controllers
 
             return Json(new { });
         }
+
+
+
+
+        [Route("/CreatePV/{Username}")]
+        [HttpPost]
+        public async Task<JsonResult> CreatePV(string Username)
+        {
+            long UserId = User.GetUserId();
+
+            var result = await _chatroomsFacad.CreateNewChatroomPVService.ExecuteAsync(UserId, Username);
+
+            return Json(result);
+        }
+
+
+
     }
 }

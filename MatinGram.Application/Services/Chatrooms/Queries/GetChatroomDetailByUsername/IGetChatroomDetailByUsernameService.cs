@@ -62,6 +62,7 @@ namespace MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByUs
                             MessageId = m.Id,
                             Text = m.Text
                         });
+                        Data.ChatroomGuid = PVChat.Guid;
                     }
 
                     return new ResultDto<ChatroomDetailByUsernameDto>()
@@ -100,6 +101,7 @@ namespace MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByUs
     {
         public string ChatroomName { get; set; }
         public string ImageName { get; set; }
+        public Guid ChatroomGuid { get; set; }
         public IEnumerable<MessageDto> Messages { get; set; }
     }
 

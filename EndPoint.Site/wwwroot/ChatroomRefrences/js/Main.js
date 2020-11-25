@@ -7,6 +7,8 @@ var chatList = document.querySelector('.main .col-left');
 
 var BackButton = document.querySelector('.chatroom-main .col-head .back');
 
+var ChatroomGuid;
+
 GetList().then(
     function (value) {
     }, function (err) {
@@ -35,7 +37,8 @@ function closeChat() {
     chatList.style = '';
     chatroom.style = '';
     chatHead.style = '';
-    BackButton.setAttribute('hidden','');
+    BackButton.setAttribute('hidden', '');
+    ChatroomGuid = null;
 }
 
 async function GetList() {
@@ -103,6 +106,7 @@ async function BuildChatroomList(data) {
 
 function loadChatroom(Guid) {
     alert('Im Here');
+    ChatroomGuid = Guid;
 }
 
 async function LoadPV(username) {
@@ -132,9 +136,9 @@ async function BuildPV(data) {
 
     ChatroomImage.setAttribute('src', data.imageName);
     ChatroomName.innerHTML = data.chatroomName
-    debugger;
 
     var ChatsBox = document.querySelector('.message .grid-message');
+    ChatroomGuid = data.chatrooomGuid;
 
     for (var i = 0; i < data.messages.length; i++) {
 

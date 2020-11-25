@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MatinGram.Application.Services.Messages.Commands.AddNewMessage;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,6 @@ namespace MatinGram.Application.Interfaces.FacadPatterns
 {
     public interface IMessagesFacad
     {
-
+        IAddNewMessageService AddNewMessageService { get; }
     }
 }

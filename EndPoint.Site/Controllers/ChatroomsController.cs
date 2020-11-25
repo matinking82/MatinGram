@@ -43,10 +43,10 @@ namespace EndPoint.Site.Controllers
         {
             var UserId = User.GetUserId();
 
-            return Json(new { });
+            var result = await _chatroomsFacad.GetChatroomDetailByGuid.ExecuteAsync(UserId, Guid);
+
+            return Json(result);
         }
-
-
 
 
         [Route("/CreatePV/{Username}")]

@@ -195,10 +195,12 @@ main.main {
 
 .messages li {
     cursor: pointer;
+    background: linear-gradient(150deg, rgb(85, 165, 165), rgb(75, 143, 143) 0%, rgb(24, 83, 83));
+    margin: 5px 0;
 }
 
     .messages li:hover {
-        background-color: rgb(25, 34, 39) !important;
+        background: linear-gradient(150deg, rgb(85, 165, 165), rgb(75, 143, 143) 200%, rgb(24, 83, 83));
     }
 
     .messages li h3,
@@ -288,6 +290,7 @@ main.main {
 
 .chatroom-main {
     padding: 0 !important;
+    overflow: hidden!important;
 }
 
     .chatroom-main .col-head .prof {
@@ -347,9 +350,10 @@ main.main {
     color: dodgerblue;
     cursor: pointer;
 }
-.btn-send:hover{
-    color:deepskyblue;
-}
+
+    .btn-send:hover {
+        color: deepskyblue;
+    }
 
 .message-image {
     width: 40px;
@@ -391,4 +395,9 @@ section.message {
 
 .message-out {
     margin: 20px;
+}
+
+.col-content {
+    overflow-y: scroll !important;
+    height:70%;
 }

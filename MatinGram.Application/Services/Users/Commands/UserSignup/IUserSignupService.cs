@@ -31,6 +31,17 @@ namespace MatinGram.Application.Services.Users.Commands.UserSignup
         {
             return await Task.Run(async () =>
             {
+
+                if (_context.Users.Any(u=> u.MobileNumber==request.MobileNumber))
+                {
+                    return new ResultDto<ResultUserSignup>()
+                    {
+                        Status = ServiceStatus.Error,
+                        Message = "این شماره قبلا ثبت شده است!!"
+                    };
+                }
+
+
                 try
                 {
                     User newUser = new User()

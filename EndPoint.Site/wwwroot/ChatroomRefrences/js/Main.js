@@ -1,5 +1,4 @@
 var messagesBox = document.querySelector(".chatroom-main .col-content");
-messagesBox.scrollTo(0, 100000010000001000);
 
 var chatroom = document.querySelector('.chatroom-main');
 var chatHead = document.querySelector('.chatroom-main .col-head');
@@ -105,7 +104,7 @@ async function openChat(Guid) {
 
         BackButton.removeAttribute('hidden');
     }
-    if (Guid != null) {
+    if (Guid != null && Guid != ChatroomGuid) {
         loadChatroom(Guid);
     }
 
@@ -134,11 +133,11 @@ async function loadChatroom(Guid) {
 }
 
 async function BuildChat(data) {
-
+    ClearChats();
     ChatroomGuid = data.chatroomGuid;
     ChatroomImage.setAttribute('src', data.imageName);
     ChatroomName.innerHTML = data.chatroomName
-    
+
     for (var i = 0; i < data.messages.length; i++) {
         var item = data.messages[i];
 
@@ -156,6 +155,8 @@ async function BuildChat(data) {
                 break;
         }
     }
+    messagesBox.scrollTo(0, 100000010000001000);
+
 }
 
 async function AddMessageChat(item) {
@@ -170,21 +171,24 @@ async function AddMessageChat(item) {
     if (item.isMe) {
         outdiv.setAttribute('class', 'col-message-sent');
         indiv.setAttribute('class', 'message-sent');
+
     } else {
         outdiv.setAttribute('class', 'col-message-received');
         indiv.setAttribute('class', 'message-received');
+
+        img.src = item.imageName;
+        img.setAttribute('class', 'message-image');
+
+        span.innerHTML = item.senderName;
+        span.setAttribute('class', 'message-name');
+
+        indiv.appendChild(img);
+        indiv.appendChild(span);
     }
-
-    img.src = item.imageName;
-    img.setAttribute('class', 'message-image');
-
-    span.innerHTML = item.senderName;
-    span.setAttribute('class', 'message-name');
 
     inP.innerHTML = item.text;
 
-    indiv.appendChild(img);
-    indiv.appendChild(span);
+
     indiv.appendChild(hr);
     indiv.appendChild(inP);
     outdiv.appendChild(indiv);
@@ -214,7 +218,7 @@ async function LoadPV(username) {
 }
 
 async function BuildPV(data) {
-
+    ClearChats();
     ChatroomGuid = data.chatroomGuid;
     ChatroomImage.setAttribute('src', data.imageName);
     ChatroomName.innerHTML = data.chatroomName
@@ -227,6 +231,7 @@ async function BuildPV(data) {
             AddMessagePV(item);
         }
     }
+    messagesBox.scrollTo(0, 100000010000001000);
 
 }
 
@@ -303,7 +308,13 @@ async function SendMessage() {
             data: message,
             success: function (data) {
                 if (data.status == 0) {
-
+                    debugger;
+                    var item = {
+                        "text": sendMessage,
+                        "isMe": true
+                    }
+                    AddMessagePV(item);
+                    messagesBox.scrollTo(0, 100000010000001000);
                 }
                 else {
 
@@ -320,4 +331,18 @@ async function SendMessage() {
 
 async function btnCamera_Click() {
     alert("Clicked");
+}
+
+async function ClearChats() {
+    debugger;
+    var AllMessages = document.querySelectorAll('.message-out .grid-message div.col-message-received,.message-out .grid-message div.col-message-sent');
+
+    if (AllMessages != null) {
+        for (var i = 0; i < AllMessages.length; i++) {
+            var item = AllMessages[i];
+
+            ChatsBox.removeChild(item);
+        }
+    }
+
 }

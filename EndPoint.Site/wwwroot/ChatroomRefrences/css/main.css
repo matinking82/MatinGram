@@ -397,7 +397,7 @@ section.message {
     margin: 20px;
 }
 
-.col-content {
+.message-box {
     overflow-y: scroll !important;
-    height:70%;
+    height: 70%;
 }

@@ -29,7 +29,6 @@ namespace MatinGram.Application.Services.Users.Queries.GetUserProfileById
                 try
                 {
                     var user = await _context.Users
-                        .Include(u => u.UserImages)
                         .FirstOrDefaultAsync(u => u.Id == UserId);
 
                     if (user == null)
@@ -44,12 +43,27 @@ namespace MatinGram.Application.Services.Users.Queries.GetUserProfileById
                     ResultGetUserProfileByIdDto Data = new ResultGetUserProfileByIdDto()
                     {
                         Bio = user.Bio,
-                        ImageName = user.UserImages.Count() > 0 ? user.UserImages.FirstOrDefault().ImageName : "/Images/UserImages/Default.png",
                         Mobile = user.MobileNumber,
                         Name = user.Name,
                         UserId = user.Id,
                         Username = user.Username,
                     };
+
+                    #region --Find Image--
+                    var userImage = _context.UserImages
+                    .Where(u => u.UserId == UserId)
+                    .ToList()
+                    .LastOrDefault();
+
+                    if (userImage != null)
+                    {
+                        Data.ImageName = userImage.ImageName;
+                    }
+                    else
+                    {
+                        Data.ImageName = "/Images/UserImages/Default.png";
+                    }
+                    #endregion
 
                     return new()
                     {

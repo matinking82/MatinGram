@@ -64,7 +64,7 @@ namespace MatinGram.Application.Services.Chatrooms.Commands.CreateNewChatroomPV
                             
                         };
                         await _context.Chatrooms.AddAsync(newChatroom);
-                        await _context.SaveChangesAsync();
+                        //await _context.SaveChangesAsync();
 
                         UserInChatroom myUserInChatroom = new UserInChatroom()
                         {

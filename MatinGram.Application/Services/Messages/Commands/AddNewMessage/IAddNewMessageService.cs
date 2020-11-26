@@ -35,7 +35,7 @@ namespace MatinGram.Application.Services.Messages.Commands.AddNewMessage
 
                     var user = await _context.Users.FindAsync(request.UserId);
 
-                    #region
+                    #region --Validation--
                     if (user == null || chatroom == null)
                     {
                         return new ResultDto()

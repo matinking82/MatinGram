@@ -15,10 +15,136 @@ namespace MatinGram.Application.Services.Chatrooms.Queries.GetChatroomsByUserId
         Task<ResultDto<IEnumerable<ResultGetChatroomsByUserId>>> Execute(long UserId);
     }
 
-    public class GetChatroomsByUserIdService : IGetChatroomsByUserIdService
+    public class NewGetChatroomsByUserIdService : IGetChatroomsByUserIdService
     {
         private readonly IDataBaseContext _context;
-        public GetChatroomsByUserIdService(IDataBaseContext context)
+        public NewGetChatroomsByUserIdService(IDataBaseContext context)
+        {
+            _context = context;
+        }
+        public async Task<ResultDto<IEnumerable<ResultGetChatroomsByUserId>>> Execute(long UserId)
+        {
+            return await Task.Run(async () =>
+            {
+                try
+                {
+                    var userInChatrooms = _context.UserInChatrooms
+                    .Where(u => u.UserId == UserId).ToList();
+
+                    if (userInChatrooms.Count() < 1)
+                    {
+                        return new ResultDto<IEnumerable<ResultGetChatroomsByUserId>>()
+                        {
+                            Status = ServiceStatus.NotFound,
+                        };
+                    }
+
+                    List<ResultGetChatroomsByUserId> Data = new List<ResultGetChatroomsByUserId>();
+
+                    #region --Fill Data--
+                    foreach (var userInChatroom in userInChatrooms)
+                    {
+                        ResultGetChatroomsByUserId res = new ResultGetChatroomsByUserId();
+
+                        var chatroom = await _context.Chatrooms
+                        .FindAsync(userInChatroom.ChatroomId);
+
+                        if (chatroom.ChatroomType == ChatroomType.PV)
+                        {
+                            #region --Find TargetUser--
+                            var targetUser = (await _context.UserInChatrooms
+                            .Include(u => u.User)
+                            .FirstOrDefaultAsync(u => u.ChatroomId == chatroom.Id && u.UserId != UserId)).User;
+                            #endregion
+
+                            res.ChatroomName = targetUser.Name;
+
+                            #region --Find Image--
+                            var userImage = await _context.UserImages
+                            .Where(u => u.UserId == targetUser.Id)
+                            .OrderBy(u=> u.InsertTime)
+                            .LastOrDefaultAsync();
+
+                            if (userImage != null)
+                            {
+                                res.ImageName = userImage.ImageName;
+                            }
+                            else
+                            {
+                                res.ImageName = "/Images/UserImages/Default.png";
+                            }
+                            #endregion
+                        }
+                        else
+                        {
+                            res.ChatroomName = chatroom.Name;
+
+                            #region --Find Image--
+                            var chatroomImage = await _context.ChatroomImages.LastOrDefaultAsync(c => c.ChatroomId == chatroom.Id);
+                            if (chatroomImage != null)
+                            {
+                                res.ImageName = chatroomImage.ImageName;
+                            }
+                            else
+                            {
+                                res.ImageName = "/Images/ChatroomImages/Default.png";
+                            }
+
+                            #endregion
+                        }
+                        #region --Find Last Message--
+                        var LastMessage = await _context.Messages
+                        .Where(m => m.ChatroomID == chatroom.Id)
+                        .OrderBy(m=> m.SendDate)
+                        .LastOrDefaultAsync();
+
+                        if (LastMessage != null)
+                        {
+                            res.LastMessage = LastMessage.Text;
+                            res.LastMessageTime = LastMessage.SendDate;
+                        }
+                        #endregion
+
+                        res.Guid = chatroom.Guid;
+
+
+                        Data.Add(res);
+                    }
+
+                    #endregion
+
+                    return new ResultDto<IEnumerable<ResultGetChatroomsByUserId>>()
+                    {
+                        Status = ServiceStatus.Success,
+                        Data = Data
+                    };
+                }
+                catch (Exception)
+                {
+                    return new ResultDto<IEnumerable<ResultGetChatroomsByUserId>>()
+                    {
+                        Status = ServiceStatus.SystemError,
+                    };
+                }
+            });
+        }
+    }
+
+
+    public record ResultGetChatroomsByUserId
+    {
+        public string LastMessage { get; set; }
+        public string ChatroomName { get; set; }
+        public string ImageName { get; set; }
+        public DateTime? LastMessageTime { get; set; }
+        public Guid Guid { get; set; }
+    }
+
+
+    public class OldGetChatroomsByUserIdService : IGetChatroomsByUserIdService
+    {
+        private readonly IDataBaseContext _context;
+        public OldGetChatroomsByUserIdService(IDataBaseContext context)
         {
             _context = context;
         }
@@ -96,14 +222,5 @@ namespace MatinGram.Application.Services.Chatrooms.Queries.GetChatroomsByUserId
                 return u.Chatroom.UserInChatrooms.FirstOrDefault(u => u.UserId != UserId).User;
             }
         }
-    }
-
-    public record ResultGetChatroomsByUserId
-    {
-        public string LastMessage { get; set; }
-        public string ChatroomName { get; set; }
-        public string ImageName { get; set; }
-        public DateTime? LastMessageTime { get; set; }
-        public Guid Guid { get; set; }
     }
 }

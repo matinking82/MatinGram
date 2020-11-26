@@ -9,6 +9,6 @@ namespace MatinGram.Domain.Entities.Common
     public class BaseEntity
     {
         public DateTime InsertTime { get; set; }
-        public DateTime UpdateTime { get; set; }
+        public DateTime? UpdateTime { get; set; }
     }
 }

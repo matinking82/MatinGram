@@ -8,7 +8,7 @@ var BackButton = document.querySelector('.chatroom-main .col-head .back');
 var btnSend = document.querySelector('.btn-send');
 var btnCamera = document.querySelector('.btn-camera');
 var ChtroomsList = document.querySelector('div.messages');
-var ChatsBox = document.querySelector('.message .grid-message');
+var ChatsBox = document.querySelector('.message-out .grid-message');
 var ChatroomImage = document.querySelector('.col-head .prof');
 var ChatroomName = document.querySelector('.col-head .name');
 

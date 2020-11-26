@@ -152,7 +152,7 @@ namespace EndPoint.Site.Controllers
                 await HttpContext.SignoutSiteAsync();
             }
 
-            return Redirect("/");
+            return Redirect("/Signup");
         }
     }
 }

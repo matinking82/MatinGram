@@ -48,6 +48,7 @@ namespace MatinGram.Application.Services.Chatrooms.Commands.CreateNewChatroomPV
                         .Where(c => c.ChatroomType == Common.Enums.ChatroomType.PV)
                         .FirstOrDefaultAsync(c => c.UserInChatrooms.Any(u => u.UserId == targetUser.Id) && c.UserInChatrooms.Any(u => u.UserId == MyUserId));
 
+
                     Guid Data = new Guid();
                     if (oldChatroom != null)
                     {

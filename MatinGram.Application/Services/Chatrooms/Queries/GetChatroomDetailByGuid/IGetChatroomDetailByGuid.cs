@@ -29,7 +29,6 @@ namespace MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByGu
                 try
                 {
                     var chatroom = await _context.Chatrooms
-                    .Include(c => c.ChatroomImages)
                     .FirstOrDefaultAsync(c => c.Guid == ChatroomGuid);
 
                     #region --Validation--
@@ -51,30 +50,46 @@ namespace MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByGu
                     }
                     #endregion
 
+
                     #region --Fill Data--
                     ChatroomDetailByGuidDto Data = new ChatroomDetailByGuidDto();
 
                     if (chatroom.ChatroomType == ChatroomType.PV)
                     {
-                        var targetUser = await _context.Users
-                        .Include(u => u.UserInChatrooms)
-                        .Include(u => u.UserImages)
-                        .FirstOrDefaultAsync(u => u.UserInChatrooms.Any(c => c.UserId != UserId && c.ChatroomId == chatroom.Id));
+                        var targetUser = (await _context.UserInChatrooms
+                        .Include(u => u.User)
+                        .FirstOrDefaultAsync(u => u.ChatroomId == chatroom.Id && u.UserId != UserId))?.User;
 
                         Data.ChatroomName = targetUser.Name;
 
-                        Data.ImageName = (targetUser.UserImages != null) ?
-                            targetUser.UserImages.FirstOrDefault().ImageName :
-                            "/Images/UserImages/Default.png";
 
+                        #region --Find Image--
+                        var userImage = await _context.UserImages.FirstOrDefaultAsync(u => u.UserId == targetUser.Id);
+
+                        Data.ImageName = (userImage != null) ?
+                            userImage.ImageName :
+                            "Images/UserImages/Default.png";
+
+                        #endregion
                     }
                     else
                     {
                         Data.ChatroomName = chatroom.Name;
 
-                        Data.ImageName = (chatroom.ChatroomImages != null) ?
-                            chatroom.ChatroomImages.FirstOrDefault().ImageName :
-                            "/Images/ChatroomImages/Default.png";
+                        #region --Find Image--
+
+
+                        var chatroomImage = await _context.ChatroomImages
+                        .Where(c => c.ChatroomId == chatroom.Id)
+                        .OrderBy(c => c.InsertTime)
+                        .LastOrDefaultAsync();
+
+                        Data.ImageName = chatroomImage != null ?
+                            chatroomImage.ImageName :
+                            "Images/ChatroomImages/Default.png";
+
+                        #endregion
+
                     }
 
                     Data.ChatroomGuid = chatroom.Guid;
@@ -82,10 +97,9 @@ namespace MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByGu
 
                     #region --Take Messages--
                     List<MessageDto> MessagesData = new List<MessageDto>();
-                    var messages = await _context.Messages
-                    .Include(m => m.Sender)
-                    .Where(m => m.ChatroomID == chatroom.Id)
-                    .ToListAsync();
+
+                    var messages = _context.Messages.Where(m => m.ChatroomID == chatroom.Id);
+
                     foreach (var message in messages)
                     {
 
@@ -98,18 +112,17 @@ namespace MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByGu
 
                         if (chatroom.ChatroomType == ChatroomType.Group)
                         {
-                            messageData.SenderName = message.Sender.Name;
-                            
+                            var sender = _context.Users.Find(message.SenderId);
+
+                            messageData.SenderName = sender.Name;
+
                             var userImage = await _context.UserImages
                             .FirstOrDefaultAsync(i => i.UserId == message.SenderId);
 
-                            messageData.ImageName = userImage!=null?
-                            userImage.ImageName:
-                            "/Images/UserImages/Default.png";
-
+                            messageData.ImageName = userImage != null ?
+                            userImage.ImageName :
+                            "Images/UserImages/Default.png";
                         }
-
-
                         MessagesData.Add(messageData);
                     }
                     #endregion
@@ -140,8 +153,6 @@ namespace MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByGu
             });
         }
     }
-
-
 
     public class ChatroomDetailByGuidDto
     {

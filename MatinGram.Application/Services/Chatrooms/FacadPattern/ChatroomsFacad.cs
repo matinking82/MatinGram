@@ -43,7 +43,7 @@ namespace MatinGram.Application.Services.Chatrooms.FacadPattern
             {
                 if (_getChatroomDetailByUsernameService == null)
                 {
-                    _getChatroomDetailByUsernameService = new GetChatroomDetailByUsernameService(_context);
+                    _getChatroomDetailByUsernameService = new NewGetChatroomDetailByUsernameService(_context);
                 }
 
                 return _getChatroomDetailByUsernameService;

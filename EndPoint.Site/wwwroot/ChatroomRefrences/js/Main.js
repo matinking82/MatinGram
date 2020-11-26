@@ -138,7 +138,7 @@ async function BuildChat(data) {
     ChatroomGuid = data.chatroomGuid;
     ChatroomImage.setAttribute('src', data.imageName);
     ChatroomName.innerHTML = data.chatroomName
-
+    
     for (var i = 0; i < data.messages.length; i++) {
         var item = data.messages[i];
 
@@ -279,15 +279,42 @@ async function btnSend_Click() {
 }
 
 async function SendMessage() {
-    alert(ChatroomGuid);
 
     var TextArea = document.querySelector('.txt-message');
-    if (TextArea.innerHTML !== '') {
+    if (TextArea.value !== '' && !(ChatroomGuid == null || ChatroomGuid == "00000000-0000-0000-0000-000000000000")) {
 
-        var message = TextArea.innerHTML;
-        TextArea.innerHTML = '';
+        var sendMessage = TextArea.value;
+        TextArea.value = '';
 
-        alert(message);
+        //var message = new FormData();
+
+        //message.append('Text', sendMessage);
+        //message.append('Guid', String.toString(ChatroomGuid))
+
+        var message = {
+            'text': sendMessage,
+            'guid': ChatroomGuid
+        }
+        //TODO
+        $.ajax({
+            contentType: 'application/x-www-form-urlencoded',
+            type: "POST",
+            url: "/Messages/AddMessage",
+            data: message,
+            success: function (data) {
+                if (data.status == 0) {
+
+                }
+                else {
+
+                    console.log('Failed To Get List!');
+                }
+            },
+            error: function (request, status, error) {
+                console.log('Failed To Get List!');
+            }
+        });
+
     }
 }
 

@@ -19,12 +19,12 @@ namespace EndPoint.Site.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> AddMessage([Bind("Text,Guid")] AddNewMessageViewModel message)
+        public async Task<JsonResult> AddMessage([Bind("Text,Guid")] AddNewMessageViewModel Message)
         {
             RequestAddNewMessageDto request = new RequestAddNewMessageDto()
             {
-                Guid = message.Guid,
-                Text = message.Text,
+                Guid = Message.Guid,
+                Text = Message.Text,
                 UserId = User.GetUserId()
             };
 

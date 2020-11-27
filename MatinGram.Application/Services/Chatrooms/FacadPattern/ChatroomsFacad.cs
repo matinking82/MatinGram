@@ -5,6 +5,7 @@ using MatinGram.Application.Services.Chatrooms.Commands.CreateNewGroup;
 using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByGuid;
 using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByUsername;
 using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomsByUserId;
+using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomTypeByGuid;
 using Microsoft.AspNetCore.Hosting;
 using System;
 using System.Collections.Generic;
@@ -95,6 +96,20 @@ namespace MatinGram.Application.Services.Chatrooms.FacadPattern
                 }
     
                 return _createNewGroupService;
+            } 
+        }
+
+        private IGetChatroomTypeByGuidService _getChatroomTypeByGuidService;
+        public IGetChatroomTypeByGuidService GetChatroomTypeByGuidService 
+        { 
+            get 
+            {
+                if (_getChatroomTypeByGuidService == null)
+                {
+                    _getChatroomTypeByGuidService = new GetChatroomTypeByGuidService(_context);
+                }
+
+                return _getChatroomTypeByGuidService;
             } 
         }
     }

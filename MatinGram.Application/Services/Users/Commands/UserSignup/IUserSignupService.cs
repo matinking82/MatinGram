@@ -51,7 +51,8 @@ namespace MatinGram.Application.Services.Users.Commands.UserSignup
                         Password = await request.Password.ToHashedAsync(),
                         InsertTime = DateTime.Now,
                         LastOnline = DateTime.Now,
-                        UserInRole = UserInRole.User
+                        UserInRole = UserInRole.User,
+                        HashKey = await Guid.NewGuid().ToString().ToHashedAsync()
                     };
 
                     await _context.Users.AddAsync(newUser);

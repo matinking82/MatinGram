@@ -8,21 +8,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MatinGram.Application.Services.Users.Queries.GetUserProfileById
+namespace MatinGram.Application.Services.Users.Queries.GetUserPublicProfileByUserId
 {
-    public interface IGetUserProfileById
+    public interface IGetUserPublicProfileByUserIdService
     {
-        Task<ResultDto<ResultGetUserProfileByIdDto>> Execute(long UserId);
+        Task<ResultDto<ResultGetUserPublicProfileByIdDto>> ExecuteAsync(long UserId);
     }
 
-    public class GetUserProfileById : IGetUserProfileById
+    public class GetUserPublicProfileByUserIdService : IGetUserPublicProfileByUserIdService
     {
         private readonly IDataBaseContext _context;
-        public GetUserProfileById(IDataBaseContext context)
+        public GetUserPublicProfileByUserIdService(IDataBaseContext context)
         {
             _context = context;
         }
-        public async Task<ResultDto<ResultGetUserProfileByIdDto>> Execute(long UserId)
+        public async Task<ResultDto<ResultGetUserPublicProfileByIdDto>> ExecuteAsync(long UserId)
         {
             return await Task.Run(async () =>
             {
@@ -33,19 +33,18 @@ namespace MatinGram.Application.Services.Users.Queries.GetUserProfileById
 
                     if (user == null)
                     {
-                        return new ResultDto<ResultGetUserProfileByIdDto>()
+                        return new ResultDto<ResultGetUserPublicProfileByIdDto>()
                         {
                             Status = ServiceStatus.NotFound,
                         };
                     }
 
 
-                    ResultGetUserProfileByIdDto Data = new ResultGetUserProfileByIdDto()
+                    ResultGetUserPublicProfileByIdDto Data = new ResultGetUserPublicProfileByIdDto()
                     {
                         Bio = user.Bio,
-                        Mobile = user.MobileNumber,
                         Name = user.Name,
-                        UserId = user.Id,
+                        UserHaskKey = user.HashKey,
                         Username = user.Username,
                     };
 
@@ -70,24 +69,22 @@ namespace MatinGram.Application.Services.Users.Queries.GetUserProfileById
                         Data = Data,
                         Status = ServiceStatus.Success
                     };
-
                 }
                 catch (Exception)
                 {
-                    return new ResultDto<ResultGetUserProfileByIdDto>()
+                    return new ResultDto<ResultGetUserPublicProfileByIdDto>()
                     {
-                        Status = ServiceStatus.SystemError,
+                        Status = Common.Enums.ServiceStatus.SystemError,
                     };
                 }
             });
         }
     }
 
-    public record ResultGetUserProfileByIdDto
+    public record ResultGetUserPublicProfileByIdDto
     {
-        public long UserId { get; set; }
+        public string UserHaskKey { get; set; }
         public string Name { get; set; }
-        public string Mobile { get; set; }
         public string Bio { get; set; }
         public string ImageName { get; set; }
         public string Username { get; set; }

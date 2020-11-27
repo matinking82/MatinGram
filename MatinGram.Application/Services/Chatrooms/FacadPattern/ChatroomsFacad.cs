@@ -1,9 +1,11 @@
 ﻿using MatinGram.Application.Interfaces;
 using MatinGram.Application.Interfaces.FacadPatterns;
 using MatinGram.Application.Services.Chatrooms.Commands.CreateNewChatroomPV;
+using MatinGram.Application.Services.Chatrooms.Commands.CreateNewGroup;
 using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByGuid;
 using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByUsername;
 using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomsByUserId;
+using Microsoft.AspNetCore.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,10 +17,12 @@ namespace MatinGram.Application.Services.Chatrooms.FacadPattern
     public class ChatroomsFacad: IChatroomsFacad
     {
         private readonly IDataBaseContext _context;
+        private readonly IHostingEnvironment _environment;
 
-        public ChatroomsFacad(IDataBaseContext context)
+        public ChatroomsFacad(IDataBaseContext context, IHostingEnvironment environment)
         {
             _context = context;
+            _environment = environment;
         }
 
 
@@ -76,6 +80,21 @@ namespace MatinGram.Application.Services.Chatrooms.FacadPattern
                 }
 
                 return _getChatroomDetailByGuid;
+            } 
+        }
+
+
+        private ICreateNewGroupService _createNewGroupService;
+        public ICreateNewGroupService CreateNewGroupService 
+        { 
+            get 
+            {
+                if (_createNewGroupService == null)
+                {
+                    _createNewGroupService = new CreateNewGroupService(_context, _environment);
+                }
+    
+                return _createNewGroupService;
             } 
         }
     }

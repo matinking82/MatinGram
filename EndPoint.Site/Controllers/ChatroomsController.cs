@@ -1,6 +1,8 @@
 ﻿using EndPoint.Site.Utilities;
 using MatinGram.Application.Interfaces.FacadPatterns;
+using MatinGram.Application.Services.Chatrooms.Commands.CreateNewGroup;
 using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByUsername;
+using MatinGram.ViewModels.ViewModels.Chatrooms;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -60,7 +62,23 @@ namespace EndPoint.Site.Controllers
             return Json(result);
         }
 
+        [Route("/CreateGroup")]
+        [HttpPost]
+        public async Task<JsonResult> CreateGroup([Bind("GroupName,ImageFile")] CreateNewGroupViewModel group)
+        {
+            var UserId = User.GetUserId();
 
+            RequestCreateNewGroupService request = new RequestCreateNewGroupService()
+            {
+                GroupName = group.GroupName,
+                ImageFile = group.ImageFile,
+                UserId = UserId,
+            };
+
+            var result = await _chatroomsFacad.CreateNewGroupService.ExecuteAsync(request);
+
+            return Json(result);
+        }
 
     }
 }

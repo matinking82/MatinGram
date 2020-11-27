@@ -62,7 +62,7 @@ namespace MatinGram.Application.Services.Chatrooms.Queries.GetChatroomsByUserId
                             #region --Find Image--
                             var userImage = await _context.UserImages
                             .Where(u => u.UserId == targetUser.Id)
-                            .OrderBy(u=> u.InsertTime)
+                            .OrderBy(u => u.InsertTime)
                             .LastOrDefaultAsync();
 
                             if (userImage != null)
@@ -80,7 +80,11 @@ namespace MatinGram.Application.Services.Chatrooms.Queries.GetChatroomsByUserId
                             res.ChatroomName = chatroom.Name;
 
                             #region --Find Image--
-                            var chatroomImage = await _context.ChatroomImages.LastOrDefaultAsync(c => c.ChatroomId == chatroom.Id);
+                            var chatroomImage = await _context.ChatroomImages
+                            .Where(c => c.ChatroomId == chatroom.Id)
+                            .OrderBy(c => c.InsertTime)
+                            .LastOrDefaultAsync();
+
                             if (chatroomImage != null)
                             {
                                 res.ImageName = chatroomImage.ImageName;
@@ -95,13 +99,17 @@ namespace MatinGram.Application.Services.Chatrooms.Queries.GetChatroomsByUserId
                         #region --Find Last Message--
                         var LastMessage = await _context.Messages
                         .Where(m => m.ChatroomID == chatroom.Id)
-                        .OrderBy(m=> m.SendDate)
+                        .OrderBy(m => m.SendDate)
                         .LastOrDefaultAsync();
 
                         if (LastMessage != null)
                         {
                             res.LastMessage = LastMessage.Text;
                             res.LastMessageTime = LastMessage.SendDate;
+                        }
+                        else
+                        {
+                            res.LastMessageTime = chatroom.InsertTime;
                         }
                         #endregion
 
@@ -116,11 +124,12 @@ namespace MatinGram.Application.Services.Chatrooms.Queries.GetChatroomsByUserId
                     return new ResultDto<IEnumerable<ResultGetChatroomsByUserId>>()
                     {
                         Status = ServiceStatus.Success,
-                        Data = Data
+                        Data = Data.OrderByDescending(c=> c.LastMessageTime),
                     };
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    _ = e.Message;
                     return new ResultDto<IEnumerable<ResultGetChatroomsByUserId>>()
                     {
                         Status = ServiceStatus.SystemError,

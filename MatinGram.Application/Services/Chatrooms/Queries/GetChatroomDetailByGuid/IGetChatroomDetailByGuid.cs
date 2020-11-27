@@ -17,6 +17,7 @@ namespace MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByGu
 
     public class GetChatroomDetailByGuid : IGetChatroomDetailByGuid
     {
+        //TODO:Error Open Group
         private readonly IDataBaseContext _context;
         public GetChatroomDetailByGuid(IDataBaseContext context)
         {
@@ -98,7 +99,9 @@ namespace MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByGu
                     #region --Take Messages--
                     List<MessageDto> MessagesData = new List<MessageDto>();
 
-                    var messages = _context.Messages.Where(m => m.ChatroomID == chatroom.Id);
+                    var messages = _context.Messages
+                    .Where(m => m.ChatroomID == chatroom.Id)
+                    .ToList();
 
                     foreach (var message in messages)
                     {
@@ -142,8 +145,9 @@ namespace MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByGu
                     };
 
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    _ = e.Message;
                     return new ResultDto<ChatroomDetailByGuidDto>()
                     {
                         Status = Common.Enums.ServiceStatus.SystemError,

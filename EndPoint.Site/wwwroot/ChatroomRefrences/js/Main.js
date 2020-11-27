@@ -1,4 +1,4 @@
-var messagesBox = document.querySelector(".chatroom-main .col-content");
+﻿var messagesBox = document.querySelector(".chatroom-main .col-content");
 
 var chatroom = document.querySelector('.chatroom-main');
 var chatHead = document.querySelector('.chatroom-main .col-head');
@@ -10,9 +10,15 @@ var ChtroomsList = document.querySelector('div.messages');
 var ChatsBox = document.querySelector('.message-out .grid-message');
 var ChatroomImage = document.querySelector('.col-head .prof');
 var ChatroomName = document.querySelector('.col-head .name');
+var btnAddNewChat = document.querySelector('.add-new-chat');
+var ModalContent = document.querySelector('#main-modal-content');
+
 
 btnSend.addEventListener('click', btnSend_Click);
 btnCamera.addEventListener('click', btnCamera_Click);
+btnAddNewChat.addEventListener('click', btnAddNewChat_Click);
+ChatroomImage.addEventListener('click', OpenProfile);
+
 
 var ChatroomGuid;
 var targetUsername;
@@ -97,6 +103,7 @@ async function openChat(Guid) {
     if (window.window.innerWidth <= 768) {
 
         chatList.style = 'display:none;';
+        btnAddNewChat.style = 'display:none;';
 
         chatroom.style = 'display: block;overflow-y:scroll;';
         chatHead.style = 'position:sticky;top:0px;z-index:10;';
@@ -184,16 +191,16 @@ async function AddMessageChat(item) {
 
         indiv.appendChild(img);
         indiv.appendChild(span);
+        indiv.appendChild(hr);
     }
 
     inP.innerHTML = item.text;
 
 
-    indiv.appendChild(hr);
     indiv.appendChild(inP);
     outdiv.appendChild(indiv);
 
-    ChatsBox.appendChild(CreateChatMessage(outdiv));
+    ChatsBox.appendChild(outdiv);
 }
 
 async function LoadPV(username) {
@@ -259,10 +266,6 @@ async function AddMessagePV(item) {
 }
 
 async function btnSend_Click() {
-
-    $('#myModal').modal('show');
-
-
 
     if ((ChatroomGuid == null || ChatroomGuid == "00000000-0000-0000-0000-000000000000") && targetUsername != null) {
         //Create Chatroom
@@ -348,4 +351,210 @@ async function ClearChats() {
         }
     }
 
+}
+
+async function btnAddNewChat_Click() {
+
+    var btnGroup = document.createElement('button');
+    btnGroup.classList.add("btn", "btn-primary");
+    btnGroup.innerHTML = "گروه جدید +";
+    btnGroup.type = "button";
+
+    var btnChannel = document.createElement('button');
+    btnChannel.classList.add("btn", "btn-primary");
+    btnChannel.innerHTML = "کانال جدید +";
+    btnChannel.type = "button";
+
+    var btnContact = document.createElement('button');
+    btnContact.classList.add("btn", "btn-primary");
+    btnContact.innerHTML = "پیدا کردن با شماره تلفن";
+    btnContact.type = "button";
+
+
+    btnGroup.addEventListener('click', btnAddNewGroup_Clicked);
+    btnChannel.addEventListener('click', btnAddNewChannel_Clicked);
+    btnContact.addEventListener('click', btnAddNewContact_Clicked);
+
+    ModalContent.innerHTML = '';
+
+    ModalContent.style = 'text-align:center;';
+    ModalContent.appendChild(btnGroup);
+    ModalContent.appendChild(document.createElement('hr'));
+    ModalContent.appendChild(btnChannel);
+    ModalContent.appendChild(document.createElement('hr'));
+    ModalContent.appendChild(btnContact);
+    ModalContent.appendChild(document.createElement('hr'));
+
+
+    ShowModal();
+}
+
+async function ShowModal() {
+    $('#myModal').modal('show');
+}
+
+async function CloseModal() {
+    ModalContent.innerHTML = '';
+    $('#myModal').modal('hide');
+}
+
+async function btnAddNewGroup_Clicked() {
+    ModalContent.innerHTML = '';
+
+
+    var inputGroupName = document.createElement('input');
+    inputGroupName.type = 'text';
+    inputGroupName.classList.add('form-control', 'col-8', 'offset-2');
+    inputGroupName.placeholder = 'نام گروه را وارد کنید';
+    inputGroupName.style = 'text-align:right;';
+    inputGroupName.id = 'AddNewGroupName';
+
+
+    var inputGroupImage = document.createElement('input');
+    inputGroupImage.type = 'file';
+    inputGroupImage.classList.add('col-4', 'offset-4');
+    inputGroupImage.placeholder = 'انتخاب عکس';
+    inputGroupImage.style = 'text-align:right;';
+    inputGroupImage.id = 'AddNewGroupImage';
+
+
+    var GroupName = document.createElement('div');
+    GroupName.classList.add('form-group');
+
+    var GroupImage = document.createElement('div');
+    GroupImage.classList.add('form-group');
+
+    GroupName.appendChild(inputGroupName);
+    GroupImage.appendChild(inputGroupImage);
+
+    ModalContent.appendChild(GroupName);
+    ModalContent.appendChild(GroupImage);
+    ModalContent.appendChild(document.createElement('hr'));
+
+    var btnSubmit = document.createElement('button');
+    btnSubmit.classList.add('btn', 'btn-success', 'btn-lg');
+    btnSubmit.innerHTML = 'ایجاد';
+    btnSubmit.addEventListener('click', btnAddNewGroup_Submit);
+
+    ModalContent.appendChild(btnSubmit);
+
+}
+
+async function btnAddNewGroup_Submit() {
+    debugger;
+
+    var GroupName = document.querySelector('#AddNewGroupName');
+    var GroupImage = document.querySelector('#AddNewGroupImage');
+
+    ModalContent.innerHTML = '<div class="text-black-50">Sending To Server...</div>';
+
+    var Data = {
+        groupName: GroupName.value,
+        imageFile: GroupImage.value
+    };
+
+    $.ajax({
+        contentType: 'application/x-www-form-urlencoded',
+        type: "POST",
+        url: "/CreateGroup",
+        data: Data,
+        success: function (data) {
+            ModalContent.innerHTML = '';
+            if (data.status == 0) {
+                ModalContent.innerHTML = '<div class="text-black-50">گروه شما ایجاد شد</div>';
+            }
+            else {
+                ModalContent.innerHTML = '<div class="text-black-50">مشکلی پیش آمد</div>';
+            }
+        },
+        error: function (request, status, error) {
+            console.log('Failed To Get List!');
+        }
+    });
+}
+
+async function btnAddNewChannel_Clicked() {
+    ModalContent.innerHTML = '<div class="text-black-50">این قسمت بزودی تکمیل خواهد شد</div>';
+
+}
+
+async function btnAddNewContact_Clicked() {
+    ModalContent.innerHTML = '<div class="text-black-50">این قسمت بزودی تکمیل خواهد شد</div>';
+}
+
+async function OpenProfile() {
+    $.ajax({
+        contentType: 'application/x-www-form-urlencoded',
+        type: "GET",
+        url: "/Chatrooms/GetProfile?ChatroomGuid=" + ChatroomGuid,
+        success: function (data) {
+
+            if (data.status == 0) {
+                debugger;
+                switch (data.type) {
+                    case 0:
+                        BuildAndShowPvProfile(data.data);
+                        break;
+                    case 1:
+                        BuildAndShowGroupProfile(data.data);
+                        break;
+                    default:
+                        console.log("مشکلی پیش آمد");
+                        break;
+                }
+            }
+            else {
+
+            }
+        },
+        error: function (request, status, error) {
+            console.log('Failed To Get List!');
+        }
+    });
+}
+
+async function BuildAndShowPvProfile(data) {
+
+    ModalContent.innerHTML = '';
+
+    var divhead = document.createElement('div');
+    divhead.classList.add('profile-image-container');
+
+    var img = document.createElement('img');
+    img.src = '/' + data.imageName;
+    img.classList.add('profile-image');
+
+    var h2name = document.createElement('h2');
+    h2name.classList.add('profile-name');
+    h2name.innerHTML = data.name;
+
+    divhead.appendChild(img);
+    divhead.appendChild(h2name);
+
+
+    var divbody = document.createElement('div');
+    divbody.classList.add('profile-body');
+
+    var h3username = document.createElement('h3');
+    h3username.classList.add('profile-username');
+    h3username.innerHTML = 'نام کاربری :' + data.username;
+
+    var pbio = document.createElement('p');
+    pbio.classList.add('profile-bio');
+    pbio.innerHTML = data.bio;
+
+    divbody.appendChild(h3username);
+    divbody.appendChild(document.createElement('hr'));
+    divbody.appendChild(pbio);
+
+
+    ModalContent.appendChild(divhead);
+    ModalContent.appendChild(divbody);
+
+    ShowModal();
+}
+
+async function BuildAndShowGroupProfile(data) {
+    //Todo : Create Profile For Group And Create Ling For Join To Group
+    debugger;
 }

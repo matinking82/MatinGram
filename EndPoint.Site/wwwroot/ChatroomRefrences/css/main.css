@@ -6,6 +6,7 @@
 * {
     margin: 0px;
     padding: 0px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 body {
@@ -280,7 +281,6 @@ main.main {
     overflow: hidden;
     margin: 0 !important;
     background: linear-gradient(150deg, rgb(85, 165, 165), rgb(75, 143, 143) 0%, rgb(24, 83, 83));
-    cursor: pointer;
     transition: linear-gradient 2s;
 }
 
@@ -301,6 +301,7 @@ main.main {
         display: block;
         margin: 10px auto;
         float: initial;
+        cursor:pointer;
     }
 
     .chatroom-main .col-head .name {
@@ -400,4 +401,60 @@ section.message {
 .message-box {
     overflow-y: scroll !important;
     height: 70%;
+}
+
+.add-new-chat {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    top: auto;
+    left: auto;
+    background: linear-gradient(150deg, rgb(85, 165, 165), rgb(75, 143, 143) 0%, rgb(24, 83, 83));
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    color: white;
+    padding: 20px 0px;
+    border-radius: 1000px;
+}
+
+    .add-new-chat:hover {
+        background: linear-gradient(150deg, rgb(85, 165, 165), rgb(75, 143, 143) 100%, rgb(24, 83, 83));
+    }
+
+.profile-image-container {
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(150deg, rgb(85, 165, 165), rgb(75, 143, 143) 0%, rgb(24, 83, 83));
+    height:30%;
+    text-align:center;
+    padding:40px;
+}
+
+.profile-image{
+    border-radius:1000px;
+    width:80px;
+    height:80px;
+}
+
+.profile-name{
+    color:gold;
+}
+
+.profile-body{
+    text-align:right;
+    padding:100px;
+}
+
+.profile-username{
+    direction:rtl;
+    font-size:25px;
+    padding:20px;
+}
+
+.profile-bio{
+    padding:20px;
+    direction:rtl;
+    font-size:20px
 }

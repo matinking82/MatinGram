@@ -260,6 +260,9 @@ async function AddMessagePV(item) {
 
 async function btnSend_Click() {
 
+    $('#myModal').modal('show');
+
+
 
     if ((ChatroomGuid == null || ChatroomGuid == "00000000-0000-0000-0000-000000000000") && targetUsername != null) {
         //Create Chatroom
@@ -277,7 +280,7 @@ async function btnSend_Click() {
                 console.log('Failed To Get List!');
             }
         });
-    } else {
+    } else if (!(ChatroomGuid == null || ChatroomGuid == "00000000-0000-0000-0000-000000000000")) {
         SendMessage();
     }
 

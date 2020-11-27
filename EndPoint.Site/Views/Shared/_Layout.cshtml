@@ -15,14 +15,11 @@
     <link rel="stylesheet" type="text/css" href="~/ChatroomRefrences/css/fontawesome-all.min.css">
     <link rel="stylesheet" type="text/css" href="~/ChatroomRefrences/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="~/ChatroomRefrences/css/main.css">
-    <script type="text/javascript" src="~/ChatroomRefrences/js/jquery-3.3.1.min.js"></script>
-    <script type="text/javascript" src="~/ChatroomRefrences/js/popper.js"></script>
-    <script type="text/javascript" src="~/ChatroomRefrences/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="~/ChatroomRefrences/css/stylemsg.css">
     <link rel="stylesheet" href="~/ChatroomRefrences/css/normalizemsg.css">
     <link rel="stylesheet" href="~/ChatroomRefrences/css/normalizemsg.css">
     <link rel="stylesheet" type="text/css" href="~/ChatroomRefrences/css/responsive.css">
-    <script type="text/javascript" src="~/ChatroomRefrences/js/custom.js"></script>
+    
 </head>
 
 <body class="my-background-2">
@@ -114,7 +111,33 @@
 
 
 
-    @RenderSection("Scripts",false)
+    
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog modal-lg">
+
+            <!-- Modal content-->
+            <div class="modal-content modal-lg">
+                <div class="modal-header modal-lg">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div id="main-modal-content" class="modal-body modal-lg">
+
+                </div>
+                @*<div class="modal-footer modal-lg">
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                </div>*@
+            </div>
+
+        </div>
+    </div>
+
+
+    <script type="text/javascript" src="~/ChatroomRefrences/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="~/ChatroomRefrences/js/popper.js"></script>
+    <script type="text/javascript" src="~/ChatroomRefrences/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/ChatroomRefrences/js/custom.js"></script>
+
+    @RenderSection("Scripts", false)
 
 </body>
 

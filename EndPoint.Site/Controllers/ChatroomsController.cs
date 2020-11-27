@@ -2,6 +2,7 @@
 using MatinGram.Application.Interfaces.FacadPatterns;
 using MatinGram.Application.Services.Chatrooms.Commands.CreateNewGroup;
 using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByUsername;
+using MatinGram.Common.Enums;
 using MatinGram.ViewModels.ViewModels.Chatrooms;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -14,9 +15,11 @@ namespace EndPoint.Site.Controllers
     public class ChatroomsController : Controller
     {
         private readonly IChatroomsFacad _chatroomsFacad;
-        public ChatroomsController(IChatroomsFacad chatroomsFacad)
+        private readonly IUsersFacad _usersFacad;
+        public ChatroomsController(IChatroomsFacad chatroomsFacad, IUsersFacad usersFacad)
         {
             _chatroomsFacad = chatroomsFacad;
+            _usersFacad = usersFacad;
         }
 
         public async Task<JsonResult> GetChatroomsList()
@@ -80,5 +83,30 @@ namespace EndPoint.Site.Controllers
             return Json(result);
         }
 
+        [HttpGet]
+        public async Task<JsonResult> GetProfile(Guid ChatroomGuid)
+        {
+            var GetTypeResult = await _chatroomsFacad.GetChatroomTypeByGuidService.ExecuteAsync(ChatroomGuid);
+
+            if (GetTypeResult.Status == ServiceStatus.Success)
+            {
+                if (GetTypeResult.Data == ChatroomType.PV)
+                {
+                    var MyUserId = User.GetUserId();
+                    var GetUserIdResult = await _chatroomsFacad.GetUserIdByPVGuidService.ExecuteAsync(MyUserId, ChatroomGuid);
+
+                    var result = await _usersFacad.GetUserPublicProfileByUserIdService.ExecuteAsync(GetUserIdResult.Data);
+
+                    return Json(new { Data = result.Data, type = GetTypeResult.Data, Status = result.Status });
+                }
+                else
+                {
+
+                }
+            }
+
+            return Json(GetTypeResult);
+
+        }
     }
 }

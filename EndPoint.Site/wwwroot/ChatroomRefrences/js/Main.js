@@ -29,6 +29,8 @@ GetList().then(
     }
 )
 
+ShowModal();
+
 async function closeChat() {
     chatList.style = '';
     chatroom.style = '';
@@ -444,20 +446,30 @@ async function btnAddNewGroup_Submit() {
     debugger;
 
     var GroupName = document.querySelector('#AddNewGroupName');
-    var GroupImage = document.querySelector('#AddNewGroupImage');
+    var imageFile = $('#AddNewGroupImage').prop('files')[0];
+    //var GroupImage = document.querySelector('#AddNewGroupImage');
 
     ModalContent.innerHTML = '<div class="text-black-50">Sending To Server...</div>';
 
-    var Data = {
-        groupName: GroupName.value,
-        imageFile: GroupImage.value
-    };
+    //var Data = {
+    //    groupName: GroupName.value,
+    //    imageFile: GroupImage.value
+    //};
+
+    debugger;
+    var Data = new FormData();
+
+    Data.append('groupName', GroupName.value);
+    Data.append('imageFile', imageFile);
 
     $.ajax({
-        contentType: 'application/x-www-form-urlencoded',
-        type: "POST",
-        url: "/CreateGroup",
+        url: '/CreateGroup', // point to server-side PHP script 
+        dataType: 'json',  // what to expect back from the PHP script, if anything
+        cache: false,
+        contentType: false,
+        processData: false,
         data: Data,
+        type: 'POST',
         success: function (data) {
             ModalContent.innerHTML = '';
             if (data.status == 0) {
@@ -471,6 +483,25 @@ async function btnAddNewGroup_Submit() {
             console.log('Failed To Get List!');
         }
     });
+
+    //$.ajax({
+    //    contentType: 'application/x-www-form-urlencoded',
+    //    type: "POST",
+    //    url: "/CreateGroup",
+    //    data: Data,
+    //    success: function (data) {
+    //        ModalContent.innerHTML = '';
+    //        if (data.status == 0) {
+    //            ModalContent.innerHTML = '<div class="text-black-50">گروه شما ایجاد شد</div>';
+    //        }
+    //        else {
+    //            ModalContent.innerHTML = '<div class="text-black-50">مشکلی پیش آمد</div>';
+    //        }
+    //    },
+    //    error: function (request, status, error) {
+    //        console.log('Failed To Get List!');
+    //    }
+    //});
 }
 
 async function btnAddNewChannel_Clicked() {

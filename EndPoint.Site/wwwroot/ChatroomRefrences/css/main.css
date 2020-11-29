@@ -290,7 +290,7 @@ main.main {
 
 .chatroom-main {
     padding: 0 !important;
-    overflow: hidden!important;
+    overflow: hidden !important;
 }
 
     .chatroom-main .col-head .prof {
@@ -301,7 +301,7 @@ main.main {
         display: block;
         margin: 10px auto;
         float: initial;
-        cursor:pointer;
+        cursor: pointer;
     }
 
     .chatroom-main .col-head .name {
@@ -427,34 +427,109 @@ section.message {
     margin: 0;
     padding: 0;
     background: linear-gradient(150deg, rgb(85, 165, 165), rgb(75, 143, 143) 0%, rgb(24, 83, 83));
-    height:30%;
-    text-align:center;
-    padding:40px;
+    height: 30%;
+    text-align: center;
+    padding: 40px;
+    position: relative;
 }
 
-.profile-image{
+    .profile-image-container i {
+        position: absolute;
+        left: 20px;
+        top: 20px;
+        right: auto;
+        bottom: auto;
+        cursor: pointer;
+        padding: 10px;
+        border-radius: 1000px;
+        color:white;
+        font-size:20px;
+    }
+
+        .profile-image-container i:hover {
+            background-color: rgb(27,87,87);
+        }
+
+.profile-image {
+    border-radius: 1000px;
+    width: 80px;
+    height: 80px;
+}
+
+.profile-name {
+    color: gold;
+}
+
+.profile-body {
+    text-align: right;
+    padding: 100px;
+}
+
+.profile-username {
+    direction: rtl;
+    font-size: 25px;
+    padding: 20px;
+}
+
+.profile-bio {
+    padding: 20px;
+    direction: rtl;
+    font-size: 20px
+}
+
+.profile-controls {
+    margin: 20px 5px;
+    padding: 20px 0px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px gray;
+}
+
+.profile-controls-item {
+    direction: rtl;
+    text-align: right;
+    margin: 0;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+    .profile-controls-item:hover {
+        background: rgb(75, 143, 143);
+        color: gold;
+        text-shadow: -1px 1px 5px black;
+    }
+
+.member-image{
+    width:40px;
+    height:40px;
     border-radius:1000px;
-    width:80px;
-    height:80px;
+    cursor:pointer;
 }
 
-.profile-name{
-    color:gold;
+i.master{
+    color:deepskyblue;
+    float:left;
+}
+i.admin {
+    float: left;
 }
 
-.profile-body{
-    text-align:right;
-    padding:100px;
+.members-list-container {
+    width: 80%;
+    padding: 20px;
+    margin: 20px auto;
+    direction: rtl;
+    text-align: right;
+    box-shadow: 0px 0px 10px gray;
+    height: 350px;
+    overflow-y: scroll;
+}
+.member{
+    overflow:hidden;
+    border-bottom:1px solid #c2c2c2;
+    padding:10px;
 }
 
-.profile-username{
-    direction:rtl;
-    font-size:25px;
-    padding:20px;
-}
-
-.profile-bio{
-    padding:20px;
-    direction:rtl;
-    font-size:20px
+.member:hover{
+    background-color:#e1d2d2;
 }

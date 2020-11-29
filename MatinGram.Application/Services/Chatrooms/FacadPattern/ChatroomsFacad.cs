@@ -6,6 +6,7 @@ using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByGuid;
 using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByUsername;
 using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomsByUserId;
 using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomTypeByGuid;
+using MatinGram.Application.Services.Chatrooms.Queries.GetGroupDetailForProfile;
 using MatinGram.Application.Services.Chatrooms.Queries.GetUserIdByPVGuid;
 using Microsoft.AspNetCore.Hosting;
 using System;
@@ -125,6 +126,20 @@ namespace MatinGram.Application.Services.Chatrooms.FacadPattern
                 }
 
                 return _getUserIdByPVGuidService;
+            } 
+        }
+
+        private IGetGroupDetailForProfileService _getGroupDetailForProfileService;
+        public IGetGroupDetailForProfileService GetGroupDetailForProfileService 
+        { 
+            get 
+            {
+                if (_getGroupDetailForProfileService == null)
+                {
+                    _getGroupDetailForProfileService = new GetGroupDetailForProfileService(_context);
+                }
+
+                return _getGroupDetailForProfileService;
             } 
         }
     }

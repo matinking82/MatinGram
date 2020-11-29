@@ -21,6 +21,7 @@ namespace MatinGram.Domain.Entities.Chatrooms
 
         public Guid Guid { get; set; }
 
+        public Guid JoinLinkGuid { get; set; }
 
         public virtual User Creator { get; set; }
         public long? CreatorId { get; set; }

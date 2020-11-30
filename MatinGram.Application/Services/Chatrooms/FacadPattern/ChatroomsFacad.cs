@@ -1,9 +1,12 @@
 ﻿using MatinGram.Application.Interfaces;
 using MatinGram.Application.Interfaces.FacadPatterns;
+using MatinGram.Application.Services.Chatrooms.Commands.ChangeJoinLinkGuid;
 using MatinGram.Application.Services.Chatrooms.Commands.CreateNewChatroomPV;
 using MatinGram.Application.Services.Chatrooms.Commands.CreateNewGroup;
+using MatinGram.Application.Services.Chatrooms.Commands.JoinToChatWithLink;
 using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByGuid;
 using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByUsername;
+using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomJoinLinkByChatroomGuid;
 using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomsByUserId;
 using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomTypeByGuid;
 using MatinGram.Application.Services.Chatrooms.Queries.GetGroupDetailForProfile;
@@ -140,6 +143,48 @@ namespace MatinGram.Application.Services.Chatrooms.FacadPattern
                 }
 
                 return _getGroupDetailForProfileService;
+            } 
+        }
+
+        private IGetChatroomJoinLinkByChatroomGuidService _getChatroomJoinLinkByChatroomGuidService;
+        public IGetChatroomJoinLinkByChatroomGuidService GetChatroomJoinLinkByChatroomGuidService 
+        { 
+            get 
+            {
+                if (_getChatroomJoinLinkByChatroomGuidService == null)
+                {
+                    _getChatroomJoinLinkByChatroomGuidService = new GetChatroomJoinLinkByChatroomGuidService(_context);
+                }
+
+                return _getChatroomJoinLinkByChatroomGuidService;
+            } 
+        }
+
+        private IChangeJoinLinkGuidService _changeJoinLinkGuidService;
+        public IChangeJoinLinkGuidService ChangeJoinLinkGuidService 
+        { 
+            get 
+            {
+                if (_changeJoinLinkGuidService == null)
+                {
+                    _changeJoinLinkGuidService = new ChangeJoinLinkGuidService(_context);
+                }
+
+                return _changeJoinLinkGuidService;
+            } 
+        }
+
+        private IJoinToChatWithLinkService _joinToChatWithLinkService;
+        public IJoinToChatWithLinkService JoinToChatWithLinkService 
+        { 
+            get 
+            {
+                if (_joinToChatWithLinkService == null)
+                {
+                    _joinToChatWithLinkService = new JoinToChatWithLinkService(_context);
+                }
+
+                return _joinToChatWithLinkService;
             } 
         }
     }

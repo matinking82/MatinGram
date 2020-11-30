@@ -1,7 +1,10 @@
-﻿using MatinGram.Application.Services.Chatrooms.Commands.CreateNewChatroomPV;
+﻿using MatinGram.Application.Services.Chatrooms.Commands.ChangeJoinLinkGuid;
+using MatinGram.Application.Services.Chatrooms.Commands.CreateNewChatroomPV;
 using MatinGram.Application.Services.Chatrooms.Commands.CreateNewGroup;
+using MatinGram.Application.Services.Chatrooms.Commands.JoinToChatWithLink;
 using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByGuid;
 using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByUsername;
+using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomJoinLinkByChatroomGuid;
 using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomsByUserId;
 using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomTypeByGuid;
 using MatinGram.Application.Services.Chatrooms.Queries.GetGroupDetailForProfile;
@@ -22,8 +25,11 @@ namespace MatinGram.Application.Interfaces.FacadPatterns
         IGetChatroomTypeByGuidService GetChatroomTypeByGuidService { get; }
         IGetUserIdByPVGuidService GetUserIdByPVGuidService { get; }
         IGetGroupDetailForProfileService GetGroupDetailForProfileService { get; }
+        IGetChatroomJoinLinkByChatroomGuidService GetChatroomJoinLinkByChatroomGuidService { get; }
 
         ICreateNewChatroomPVService CreateNewChatroomPVService { get; }
         ICreateNewGroupService CreateNewGroupService { get; }
+        IChangeJoinLinkGuidService ChangeJoinLinkGuidService { get; }
+        IJoinToChatWithLinkService JoinToChatWithLinkService { get; }
     }
 }

@@ -29,8 +29,6 @@ GetList().then(
     }
 )
 
-ShowModal();
-
 async function closeChat() {
     chatList.style = '';
     chatroom.style = '';
@@ -514,14 +512,19 @@ async function btnAddNewContact_Clicked() {
 }
 
 async function OpenProfile() {
+    var Data = {
+        'chatroomGuid': ChatroomGuid
+    }
+    ChatroomGuid = Data.chatroomGuid;
+
     $.ajax({
         contentType: 'application/x-www-form-urlencoded',
         type: "GET",
-        url: "/Chatrooms/GetProfile?ChatroomGuid=" + ChatroomGuid,
+        data: Data,
+        url: "/Chatrooms/GetProfile",
         success: function (data) {
-
+            ChatroomGuid = data.guid;
             if (data.status == 0) {
-                debugger;
                 switch (data.type) {
                     case 0:
                         BuildAndShowPvProfile(data.data);
@@ -586,6 +589,218 @@ async function BuildAndShowPvProfile(data) {
 }
 
 async function BuildAndShowGroupProfile(data) {
-    //Todo : Create Profile For Group And Create Ling For Join To Group
-    debugger;
+
+    ModalContent.innerHTML = '';
+    ShowModal();
+    /////////////////////////////////
+    var headdiv = document.createElement('div');
+    headdiv.classList.add('profile-image-container');
+
+
+    var groupImg = document.createElement('img');
+    groupImg.classList.add('profile-image');
+    groupImg.src = data.imageName;
+
+    var h2name = document.createElement('h2');
+    h2name.classList.add('profile-name');
+    h2name.innerHTML = data.groupName;
+
+    if (data.myLevel >= 1) {
+        var settingIcon = document.createElement('i');
+        settingIcon.classList.add('fa', 'fa-chain');
+        headdiv.appendChild(settingIcon);
+    }
+
+    headdiv.appendChild(groupImg);
+    headdiv.appendChild(h2name);
+    /////////////////////////////
+
+    var controlsdiv = document.createElement('div');
+    controlsdiv.classList.add('profile-controls');
+
+    var controlDiv = document.createElement('div');
+    controlDiv.classList.add('profile-controls-item');
+    controlDiv.innerHTML = 'لینک دعوت به گروه';
+    controlDiv.addEventListener('click', OpenGroupLink);
+
+    controlsdiv.appendChild(controlDiv);
+
+
+    var membersContainerDiv = document.createElement('div');
+    membersContainerDiv.classList.add('members-list-container');
+    membersContainerDiv.innerHTML = '<h2 dir="rtl">اعضا : </h2>'
+
+    for (var i = 0; i < data.members.length; i++) {
+        var item = data.members[i];
+
+        var memberdiv = document.createElement('div');
+        memberdiv.classList.add('member');
+        memberdiv.setAttribute('key', item.hashKey);
+
+        var memberimg = document.createElement('img');
+        memberimg.src = item.imageName;
+        memberimg.classList.add('member-image');
+
+        var spanName = document.createElement('span');
+        spanName.classList.add('member-name');
+        spanName.innerHTML = item.name;
+
+        memberdiv.appendChild(memberimg);
+        memberdiv.appendChild(spanName);
+
+        switch (item.memberLevel) {
+
+            case 1:
+                var adminstar = document.createElement('i');
+                adminstar.classList.add('fa', 'fa-star', 'admin');
+                memberdiv.appendChild(adminstar);
+                break;
+
+            case 2:
+                var adminstar = document.createElement('i');
+                adminstar.classList.add('fa', 'fa-star', 'master');
+                memberdiv.appendChild(adminstar);
+                break;
+
+            default:
+                break;
+        }
+
+        membersContainerDiv.appendChild(memberdiv);
+    }
+
+
+
+    ModalContent.appendChild(headdiv);
+    ModalContent.appendChild(controlsdiv);
+    ModalContent.appendChild(membersContainerDiv);
+
+
+
+}
+
+function OpenGroupLink() {
+    ModalContent.innerHTML = '';
+
+    var outdiv = document.createElement('div');
+    outdiv.classList.add('group-link-container');
+
+    var indiv = document.createElement('div');
+    indiv.classList.add('group-link');
+
+    var spanlink = document.createElement('span');
+    spanlink.classList.add('group-link-display');
+
+    var copyIcon = document.createElement('i');
+    copyIcon.classList.add('fa', 'fa-clipboard');
+    copyIcon.addEventListener('click', CopyGroupLink);
+
+    indiv.appendChild(spanlink);
+    indiv.appendChild(copyIcon);
+
+    var btnChage = document.createElement('button');
+    btnChage.classList.add('btn', 'btn-primary');
+    btnChage.innerHTML = 'تعویض لینک گروه';
+
+    btnChage.addEventListener('click', btnChangeLink_Clicked);
+
+
+    outdiv.appendChild(indiv);
+    outdiv.appendChild(document.createElement('br'));
+    outdiv.appendChild(btnChage);
+
+    ModalContent.appendChild(outdiv);
+
+    GetGroupLinkByGuid(ChatroomGuid);
+}
+
+async function CopyGroupLink() {
+    var link = document.querySelector('span.group-link-display').innerHTML;
+
+    copyTextToClipboard(link);
+
+    alert('در کلیپ بورد کپی شد');
+}
+
+function GetGroupLinkByGuid(guid) {
+    //ToDo
+    ChatroomGuid = guid;
+    $.ajax({
+        contentType: 'application/x-www-form-urlencoded',
+        type: "GET",
+        url: "/GetGroupLink/" + guid,
+        success: function (data) {
+            if (data.status == 0) {
+                document.querySelector('span.group-link-display').innerHTML = 'https://localhost:5001/JoinChat/' + data.data.chatroomJoinLinkGuid;
+            }
+            else {
+
+            }
+        },
+        error: function (request, status, error) {
+            console.log('Failed To Get List!');
+        }
+    });
+}
+
+function btnChangeLink_Clicked() {
+
+    ChangeGroupLink(ChatroomGuid);
+
+}
+
+function ChangeGroupLink(guid) {
+    ChatroomGuid = guid;
+    $.ajax({
+        contentType: 'application/x-www-form-urlencoded',
+        type: "GET",
+        url: "/ChangeGroupLink/" + guid,
+        success: function (data) {
+            if (data.status == 0) {
+                document.querySelector('span.group-link-display').innerHTML = 'https://localhost:5001/JoinChat/' + data.data;
+            }
+            else {
+
+            }
+        },
+        error: function (request, status, error) {
+            console.log('Failed To Get List!');
+        }
+    });
+}
+
+function fallbackCopyTextToClipboard(text) {
+    var textArea = document.createElement("textarea");
+    textArea.value = text;
+
+    // Avoid scrolling to bottom
+    textArea.style.top = "0";
+    textArea.style.left = "0";
+    textArea.style.position = "fixed";
+
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+        var successful = document.execCommand('copy');
+        var msg = successful ? 'successful' : 'unsuccessful';
+        console.log('Fallback: Copying text command was ' + msg);
+    } catch (err) {
+        console.error('Fallback: Oops, unable to copy', err);
+    }
+
+    document.body.removeChild(textArea);
+}
+
+function copyTextToClipboard(text) {
+    if (!navigator.clipboard) {
+        fallbackCopyTextToClipboard(text);
+        return;
+    }
+    navigator.clipboard.writeText(text).then(function () {
+        console.log('Async: Copying to clipboard was successful!');
+    }, function (err) {
+        console.error('Async: Could not copy text: ', err);
+    });
 }

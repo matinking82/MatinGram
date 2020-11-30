@@ -442,8 +442,8 @@ section.message {
         cursor: pointer;
         padding: 10px;
         border-radius: 1000px;
-        color:white;
-        font-size:20px;
+        color: white;
+        font-size: 20px;
     }
 
         .profile-image-container i:hover {
@@ -499,17 +499,18 @@ section.message {
         text-shadow: -1px 1px 5px black;
     }
 
-.member-image{
-    width:40px;
-    height:40px;
-    border-radius:1000px;
-    cursor:pointer;
+.member-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 1000px;
+    cursor: pointer;
 }
 
-i.master{
-    color:deepskyblue;
-    float:left;
+i.master {
+    color: deepskyblue;
+    float: left;
 }
+
 i.admin {
     float: left;
 }
@@ -524,12 +525,43 @@ i.admin {
     height: 350px;
     overflow-y: scroll;
 }
-.member{
-    overflow:hidden;
-    border-bottom:1px solid #c2c2c2;
-    padding:10px;
+
+.member {
+    overflow: hidden;
+    border-bottom: 1px solid #c2c2c2;
+    padding: 10px;
 }
 
-.member:hover{
-    background-color:#e1d2d2;
+    .member:hover {
+        background-color: #e1d2d2;
+    }
+
+.group-link-container {
+    text-align: center;
+    height: 50vh;
+    padding: 10vh;
+    max-height: 100%;
 }
+
+.group-link {
+    box-shadow: 0px 0px 50px gray;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 40px auto;
+    overflow:hidden;
+}
+
+    .group-link span {
+        color: dodgerblue;
+        cursor:default;
+    }
+
+    .group-link i {
+        float:right;
+        margin:10px;
+        font-size:20px;
+        cursor:pointer;
+    }
+    .group-link i:hover{
+        color:deepskyblue;
+    }

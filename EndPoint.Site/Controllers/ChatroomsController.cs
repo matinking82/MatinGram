@@ -90,23 +90,62 @@ namespace EndPoint.Site.Controllers
 
             if (GetTypeResult.Status == ServiceStatus.Success)
             {
+                var MyUserId = User.GetUserId();
+
                 if (GetTypeResult.Data == ChatroomType.PV)
                 {
-                    var MyUserId = User.GetUserId();
                     var GetUserIdResult = await _chatroomsFacad.GetUserIdByPVGuidService.ExecuteAsync(MyUserId, ChatroomGuid);
 
                     var result = await _usersFacad.GetUserPublicProfileByUserIdService.ExecuteAsync(GetUserIdResult.Data);
 
-                    return Json(new { Data = result.Data, type = GetTypeResult.Data, Status = result.Status });
+                    return Json(new { Data = result.Data, type = GetTypeResult.Data, Status = result.Status, Guid = ChatroomGuid });
                 }
                 else
                 {
+                    var result = await _chatroomsFacad.GetGroupDetailForProfileService.ExecuteAsync(MyUserId, ChatroomGuid);
 
+                    return Json(new { Data = result.Data, type = GetTypeResult.Data, Status = result.Status, Guid = ChatroomGuid });
                 }
             }
 
             return Json(GetTypeResult);
-
         }
+
+        [Route("GetGroupLink/{chatroomGuid}")]
+        public async Task<JsonResult> GetGroupJoinLing(Guid chatroomGuid)
+        {
+            var UserId = User.GetUserId();
+
+            var result = await _chatroomsFacad.GetChatroomJoinLinkByChatroomGuidService.ExecuteAsync(UserId, chatroomGuid);
+
+            return Json(result);
+        }
+
+        [Route("ChangeGroupLink/{chatroomGuid}")]
+        public async Task<JsonResult> ChangeGroupLink(Guid chatroomGuid)
+        {
+            var UserId = User.GetUserId();
+
+            var result = await _chatroomsFacad.ChangeJoinLinkGuidService.ExecuteAsync(UserId, chatroomGuid);
+
+            return Json(result);
+        }
+
+        [Route("JoinChat/{JoinLinkGuid}")]
+        public async Task<IActionResult> JoinChat(Guid JoinLinkGuid)
+        {
+            var UserId = User.GetUserId();
+
+            var result = await _chatroomsFacad.JoinToChatWithLinkService.ExecuteAsync(UserId, JoinLinkGuid);
+
+            if (result.Status!=ServiceStatus.Success)
+            {
+                ViewBag.Message = "مشکلی پیش آمد";
+                return View("ShowMessage");
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
     }
 }

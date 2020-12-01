@@ -132,13 +132,14 @@ namespace EndPoint.Site.Controllers
         }
 
         [Route("JoinChat/{JoinLinkGuid}")]
+        [HttpGet]
         public async Task<IActionResult> JoinChat(Guid JoinLinkGuid)
         {
             var UserId = User.GetUserId();
 
             var result = await _chatroomsFacad.JoinToChatWithLinkService.ExecuteAsync(UserId, JoinLinkGuid);
 
-            if (result.Status!=ServiceStatus.Success)
+            if (result.Status != ServiceStatus.Success)
             {
                 ViewBag.Message = "مشکلی پیش آمد";
                 return View("ShowMessage");
@@ -146,6 +147,25 @@ namespace EndPoint.Site.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+        [Route("JoinChat")]
+        [HttpPost]
+        public async Task<JsonResult> JoinChatPost(Guid JoinLinkGuid)
+        {
+            var UserId = User.GetUserId();
 
+            var result = await _chatroomsFacad.JoinToChatWithLinkService.ExecuteAsync(UserId, JoinLinkGuid);
+
+            return Json(result);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> GetChatroomGuidByJoinGuid(Guid JoinLinkGuid)
+        {
+            var UserId = User.GetUserId();
+
+            var result = await _chatroomsFacad.GetChatroomGuidByJoinGuidService.ExecuteAsync(UserId, JoinLinkGuid);
+
+            return Json(result);
+        }
     }
 }

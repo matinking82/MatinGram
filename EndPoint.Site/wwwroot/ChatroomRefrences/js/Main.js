@@ -193,8 +193,9 @@ async function AddMessageChat(item) {
         indiv.appendChild(span);
         indiv.appendChild(hr);
     }
-
-    inP.innerHTML = item.text;
+    /////////////
+    inP.innerHTML = MakeMessagesText(item.text);
+    /////////////
 
 
     indiv.appendChild(inP);
@@ -255,14 +256,19 @@ async function AddMessagePV(item) {
         outdiv.setAttribute('class', 'col-message-received');
         indiv.setAttribute('class', 'message-received');
     }
-
-    inP.innerHTML = item.text;
-
+    //////////////
+    inP.innerHTML = MakeMessagesText(item.text);
+    /////////////
 
     indiv.appendChild(inP);
     outdiv.appendChild(indiv);
 
     ChatsBox.appendChild(outdiv);
+}
+
+function MakeMessagesText(Text) {
+
+    return Text;
 }
 
 async function btnSend_Click() {

@@ -548,20 +548,38 @@ i.admin {
     padding: 20px;
     border-radius: 10px;
     margin: 40px auto;
-    overflow:hidden;
+    overflow: hidden;
 }
 
     .group-link span {
         color: dodgerblue;
-        cursor:default;
+        cursor: default;
     }
 
     .group-link i {
-        float:right;
-        margin:10px;
-        font-size:20px;
-        cursor:pointer;
+        float: right;
+        margin: 10px;
+        font-size: 20px;
+        cursor: pointer;
     }
-    .group-link i:hover{
-        color:deepskyblue;
+
+        .group-link i:hover {
+            color: deepskyblue;
+        }
+
+.username-link::before {
+    content: "@";
+}
+
+.in-message-link {
+    color: #ffd304;
+}
+
+    .in-message-link:hover {
+        color: cyan;
+        background-color:#12508d;
     }
+
+.message-sent p, .message-received p {
+    font-size:20px;
+}

@@ -140,6 +140,7 @@ async function loadChatroom(Guid) {
 }
 
 async function BuildChat(data) {
+    debugger;
     ClearChats();
     ChatroomGuid = data.chatroomGuid;
     ChatroomImage.setAttribute('src', data.imageName);
@@ -215,8 +216,7 @@ async function LoadPV(username) {
                 targetUsername = username;
             }
             else {
-
-                console.log('Failed To Get List!');
+                alert('کاربری یافت نشد');
             }
         },
         error: function (request, status, error) {
@@ -268,7 +268,70 @@ async function AddMessagePV(item) {
 
 function MakeMessagesText(Text) {
 
+    Text = SetUserNames(Text);
+    Text = SetJoinLinks(Text);
+
     return Text;
+}
+
+function SetUserNames(Text) {
+
+    var rx = new RegExp('\\s{0,1}\@{1}(\\w{1}[\\d \\w]+)\\b');
+
+
+    while (Text.match(rx) != null) {
+        var found = Text.match(rx);
+
+        Text = Text.replace(rx, ' <pre class="username-link in-message-link" onclick="LoadPV(\'' + found[1] + '\')">' + found[1] + '</pre>');
+    }
+
+    return Text;
+}
+
+function SetJoinLinks(Text) {
+
+    //https://localhost:5001/JoinChat/4ad5c061-184e-44b2-93af-bdda78e90552
+    debugger;
+    var rx = new RegExp('\\s{0,1}(https://localhost:5001/JoinChat/([\\d \\w]{8}-[\\d \\w]{4}-[\\d \\w]{4}-[\\d \\w]{4}-[\\d \\w]{12}))', "g");
+
+    var foundAll = Text.match(rx);
+
+    if (foundAll != null) {
+        var foundFixed = [];
+        for (var i = 0; i < foundAll.length; i++) {
+            var matched = foundAll[i];
+
+            var matchedFixed = matched.replace(new RegExp('\\s+'), '');
+            if (!found.includes(matchedFixed)) {
+                found.push(matchedFixed);
+            }
+
+        }
+
+        for (var i = 0; i < foundFixed.length; i++) {
+            var matched = foundFixed[i];
+
+
+            var rx2 = new RegExp('https://localhost:5001/JoinChat/([\\d \\w]{8}-[\\d \\w]{4}-[\\d \\w]{4}-[\\d \\w]{4}-[\\d \\w]{12})');
+            var f1 = matched.match(rx2);
+
+            var rx3 = new RegExp(f1[0], 'g');
+            Text = Text.replace(rx3, '<pre class="in-message-link" onclick="JoinChat(\'' + f1[1] + '\')">' + f1[0] + '</pre>')
+        }
+    }
+
+
+    //while (Text.match(rx) != null) {
+
+    //    Text = Text.replace(rx, ' <span class="in-message-link" onclick="JoinChat(\'' + found[2] + '\')">' + found[1] + '</span>');
+    //}
+
+    return Text;
+}
+
+async function JoinChat(guid) {
+
+    alert(guid);
 }
 
 async function btnSend_Click() {
@@ -346,7 +409,6 @@ async function btnCamera_Click() {
 }
 
 async function ClearChats() {
-    debugger;
     var AllMessages = document.querySelectorAll('.message-out .grid-message div.col-message-received,.message-out .grid-message div.col-message-sent');
 
     if (AllMessages != null) {

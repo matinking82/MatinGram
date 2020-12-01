@@ -6,6 +6,7 @@ using MatinGram.Application.Services.Chatrooms.Commands.CreateNewGroup;
 using MatinGram.Application.Services.Chatrooms.Commands.JoinToChatWithLink;
 using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByGuid;
 using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByUsername;
+using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomGuidByJoinGuid;
 using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomJoinLinkByChatroomGuid;
 using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomsByUserId;
 using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomTypeByGuid;
@@ -185,6 +186,20 @@ namespace MatinGram.Application.Services.Chatrooms.FacadPattern
                 }
 
                 return _joinToChatWithLinkService;
+            } 
+        }
+
+        private IGetChatroomGuidByJoinGuidService _getChatroomGuidByJoinGuidService;
+        public IGetChatroomGuidByJoinGuidService GetChatroomGuidByJoinGuidService 
+        { 
+            get 
+            {
+                if (_getChatroomGuidByJoinGuidService == null)
+                {
+                    _getChatroomGuidByJoinGuidService = new GetChatroomGuidByJoinGuidService(_context);
+                }
+
+                return _getChatroomGuidByJoinGuidService;
             } 
         }
     }

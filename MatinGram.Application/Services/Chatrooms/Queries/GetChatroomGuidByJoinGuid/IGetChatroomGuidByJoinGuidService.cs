@@ -7,29 +7,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MatinGram.Application.Services.Chatrooms.Commands.ChangeJoinLinkGuid
+namespace MatinGram.Application.Services.Chatrooms.Queries.GetChatroomGuidByJoinGuid
 {
-    public interface IChangeJoinLinkGuidService
+    public interface IGetChatroomGuidByJoinGuidService
     {
-        Task<ResultDto<Guid>> ExecuteAsync(long MyUserId, Guid ChatroomGuid);
+        Task<ResultDto<Guid>> ExecuteAsync(long MyUserId, Guid ChatroomJoinGuid);
     }
 
-    public class ChangeJoinLinkGuidService : IChangeJoinLinkGuidService
+    public class GetChatroomGuidByJoinGuidService : IGetChatroomGuidByJoinGuidService
     {
         private readonly IDataBaseContext _context;
-        public ChangeJoinLinkGuidService(IDataBaseContext context)
+        public GetChatroomGuidByJoinGuidService(IDataBaseContext context)
         {
             _context = context;
         }
-        public async Task<ResultDto<Guid>> ExecuteAsync(long MyUserId, Guid ChatroomGuid)
+        public async Task<ResultDto<Guid>> ExecuteAsync(long MyUserId, Guid ChatroomJoinGuid)
         {
             return await Task.Run(async () =>
             {
                 try
                 {
                     var chatroom = await _context.Chatrooms
-                    .FirstOrDefaultAsync(c => c.Guid == ChatroomGuid);
-                    #region validation
+                    .FirstOrDefaultAsync(c => c.JoinLinkGuid == ChatroomJoinGuid);
+
+
+                    #region Validation
                     if (chatroom == null || chatroom.ChatroomType == Common.Enums.ChatroomType.PV)
                     {
                         return new ResultDto<Guid>()
@@ -37,8 +39,7 @@ namespace MatinGram.Application.Services.Chatrooms.Commands.ChangeJoinLinkGuid
                             Status = Common.Enums.ServiceStatus.NotFound,
                         };
                     }
-
-                    if (!_context.AdminInChatrooms.Any(a => a.UserId == MyUserId && a.ChatroomId == chatroom.Id) || chatroom.CreatorId != MyUserId)
+                    if (!_context.UserInChatrooms.Any(u => u.ChatroomId == chatroom.Id && u.UserId == MyUserId))
                     {
                         return new ResultDto<Guid>()
                         {
@@ -47,17 +48,11 @@ namespace MatinGram.Application.Services.Chatrooms.Commands.ChangeJoinLinkGuid
                     }
                     #endregion
 
-
-                    chatroom.JoinLinkGuid = Guid.NewGuid();
-
-                    await _context.SaveChangesAsync();
-
                     return new ResultDto<Guid>()
                     {
-                        Data = chatroom.JoinLinkGuid,
                         Status = Common.Enums.ServiceStatus.Success,
+                        Data = chatroom.Guid,
                     };
-
                 }
                 catch (Exception)
                 {

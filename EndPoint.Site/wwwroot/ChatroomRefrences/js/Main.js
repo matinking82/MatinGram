@@ -65,7 +65,7 @@ async function BuildChatroomList(data) {
     }
 }
 
-async function AddChatroom(item) {
+async function AddChatroom(item, first = false) {
 
     var li = document.createElement('li');
     var outdiv = document.createElement('div');
@@ -94,8 +94,11 @@ async function AddChatroom(item) {
         openChat(Guid);
     });
 
-
-    ChtroomsList.appendChild(li);
+    if (!first) {
+        ChtroomsList.appendChild(li);
+    } else {
+        ChtroomsList.appendChild(li);
+    }
 }
 
 async function openChat(Guid) {
@@ -117,13 +120,39 @@ async function openChat(Guid) {
 
 }
 
-async function loadChatroom(Guid) {
+async function LoadChatroomByJoinGuid(guid) {
+    //GetChatroomGuidByJoinGuid
+    var Data = {
+        joinLinkGuid: guid
+    };
+    $.ajax({
+        contentType: 'application/x-www-form-urlencoded',
+        type: "POST",
+        url: "/Chatrooms/GetChatroomGuidByJoinGuid",
+        data: Data,
+        success: function (data) {
+            if (data.status == 0) {
+                loadChatroom(data.data);
+            }
+            else {
 
+                console.log('Failed To Get List!');
+            }
+        },
+        error: function (request, status, error) {
+            console.log('Failed To Get List!');
+        }
+    });
+
+}
+
+async function loadChatroom(Guid) {
     $.ajax({
         contentType: 'application/x-www-form-urlencoded',
         type: "GET",
         url: "/OpenChat/" + Guid,
         success: function (data) {
+            debugger;
             if (data.status == 0) {
                 BuildChat(data.data);
             }
@@ -140,7 +169,6 @@ async function loadChatroom(Guid) {
 }
 
 async function BuildChat(data) {
-    debugger;
     ClearChats();
     ChatroomGuid = data.chatroomGuid;
     ChatroomImage.setAttribute('src', data.imageName);
@@ -275,14 +303,14 @@ function MakeMessagesText(Text) {
 }
 
 function SetUserNames(Text) {
-
+    debugger;
     var rx = new RegExp('\\s{0,1}\@{1}(\\w{1}[\\d \\w]+)\\b');
 
 
     while (Text.match(rx) != null) {
         var found = Text.match(rx);
 
-        Text = Text.replace(rx, ' <pre class="username-link in-message-link" onclick="LoadPV(\'' + found[1] + '\')">' + found[1] + '</pre>');
+        Text = Text.replace(rx, ' <span class="username-link in-message-link" onclick="LoadPV(\'' + found[1] + '\')">' + found[1] + '</span>');
     }
 
     return Text;
@@ -302,8 +330,8 @@ function SetJoinLinks(Text) {
             var matched = foundAll[i];
 
             var matchedFixed = matched.replace(new RegExp('\\s+'), '');
-            if (!found.includes(matchedFixed)) {
-                found.push(matchedFixed);
+            if (!foundFixed.includes(matchedFixed)) {
+                foundFixed.push(matchedFixed);
             }
 
         }
@@ -316,7 +344,7 @@ function SetJoinLinks(Text) {
             var f1 = matched.match(rx2);
 
             var rx3 = new RegExp(f1[0], 'g');
-            Text = Text.replace(rx3, '<pre class="in-message-link" onclick="JoinChat(\'' + f1[1] + '\')">' + f1[0] + '</pre>')
+            Text = Text.replace(rx3, '<span class="in-message-link" onclick="JoinChat(\'' + f1[1] + '\')">' + f1[0] + '</span>')
         }
     }
 
@@ -331,7 +359,30 @@ function SetJoinLinks(Text) {
 
 async function JoinChat(guid) {
 
-    alert(guid);
+    var Data = {
+        joinLinkGuid: guid
+    }
+
+    $.ajax({
+        contentType: 'application/x-www-form-urlencoded',
+        type: "POST",
+        url: "/JoinChat",
+        data: Data,
+        success: function (data) {
+            if (data.status == 0) {
+                AddChatroom(data.data, true);
+            } else if (data.status == 4) {
+                LoadChatroomByJoinGuid(guid);
+            }
+            else {
+
+                console.log('Failed To Get List!');
+            }
+        },
+        error: function (request, status, error) {
+            console.log('Failed To Get List!');
+        }
+    });
 }
 
 async function btnSend_Click() {

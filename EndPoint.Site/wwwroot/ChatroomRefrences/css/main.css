@@ -573,6 +573,7 @@ i.admin {
 
 .in-message-link {
     color: #ffd304;
+    display: inline-block;
 }
 
     .in-message-link:hover {

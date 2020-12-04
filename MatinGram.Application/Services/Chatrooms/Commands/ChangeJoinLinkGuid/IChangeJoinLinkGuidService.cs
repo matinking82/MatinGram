@@ -38,7 +38,7 @@ namespace MatinGram.Application.Services.Chatrooms.Commands.ChangeJoinLinkGuid
                         };
                     }
 
-                    if (!_context.AdminInChatrooms.Any(a => a.UserId == MyUserId && a.ChatroomId == chatroom.Id) || chatroom.CreatorId != MyUserId)
+                    if ((!_context.AdminInChatrooms.Any(a => a.UserId == MyUserId && a.ChatroomId == chatroom.Id)) && chatroom.CreatorId != MyUserId)
                     {
                         return new ResultDto<Guid>()
                         {

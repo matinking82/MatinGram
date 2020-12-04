@@ -18,7 +18,7 @@ namespace EndPoint.Site.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index(string? Username, Guid? Guid)
+        public IActionResult Index(string Username, Guid? Guid)
         {
             if (Guid != null)
             {

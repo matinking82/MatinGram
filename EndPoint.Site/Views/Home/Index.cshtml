@@ -32,7 +32,7 @@
             <div class="compose-dock">
                 <div class="dock">
                     @*<img src="~/ChatroomRefrences/img/picture.svg"><img src="~/ChatroomRefrences/img/smile.svg">*@
-                        
+
                     <i class="fa fa-camera btn-camera"></i>
                     <i class="fa fa-arrow-circle-right btn-send"></i>
                 </div>
@@ -79,6 +79,8 @@
     }
     else if (ViewBag.Guid != null)
     {
-
+        <script>
+            openChat(@ViewBag.Guid);
+        </script>
     }
 }

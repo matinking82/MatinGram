@@ -30,7 +30,7 @@ namespace EndPoint.Site.Controllers
 
             var result = await _messagesFacad.AddNewMessageService.ExecuteAsync(request);
 
-            return Json(result);
+            return Json(new { Status = result.Status });
         }
     }
 }

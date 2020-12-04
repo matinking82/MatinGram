@@ -443,8 +443,7 @@ async function SendMessage() {
                     messagesBox.scrollTo(0, 100000010000001000);
                 }
                 else {
-
-                    console.log('Failed To Get List!');
+                    alert("مشکلی در ارسال پیام پیش آمد");
                 }
             },
             error: function (request, status, error) {

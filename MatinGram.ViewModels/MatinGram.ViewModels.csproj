@@ -8,4 +8,9 @@
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MatinGram.Application\MatinGram.Application.csproj" />
+    <ProjectReference Include="..\MatinGram.Common\MatinGram.Common.csproj" />
+  </ItemGroup>
+
 </Project>

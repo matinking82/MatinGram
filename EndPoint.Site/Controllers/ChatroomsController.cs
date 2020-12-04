@@ -4,6 +4,8 @@ using MatinGram.Application.Services.Chatrooms.Commands.CreateNewGroup;
 using MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByUsername;
 using MatinGram.Common.Enums;
 using MatinGram.ViewModels.ViewModels.Chatrooms;
+using MatinGram.ViewModels.ViewModels.Messages;
+using MatinGram.ViewModels.ViewModels.Users;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -29,7 +31,16 @@ namespace EndPoint.Site.Controllers
 
             var result = await _chatroomsFacad.GetChatroomsByUserIdService.Execute(UserId);
 
-            return Json(result);
+            IEnumerable<ChatroomsListViewModel> Data = result.Data.Select(c => new ChatroomsListViewModel()
+            {
+                ChatroomName = c.ChatroomName,
+                Guid = c.Guid,
+                ImageName = c.ImageName,
+                LastMessage = c.LastMessage,
+                LastMessageTime = c.LastMessageTime
+            });
+
+            return Json(new { Status = result.Status, Data = Data });
         }
 
         [Route("/OpenPV/{Username}")]
@@ -39,7 +50,22 @@ namespace EndPoint.Site.Controllers
 
             var result = await _chatroomsFacad.GetChatroomDetailByUsernameService.Execute(UserId, Username);
 
-            return Json(result);
+
+            ChatroomPVDetailsViewModel Data = new ChatroomPVDetailsViewModel()
+            {
+                ChatroomGuid = result.Data.ChatroomGuid,
+                ChatroomName = result.Data.ChatroomName,
+                ImageName = result.Data.ImageName,
+                Messages = result.Data.Messages?.Select(m => new PVMessageViewModel()
+                {
+                    Date = m.Date,
+                    IsMe = m.IsMe,
+                    MessageId = m.MessageId,
+                    Text = m.Text,
+                }).ToList(),
+            };
+
+            return Json(new { Status = result.Status, Data = Data });
         }
 
 
@@ -50,7 +76,24 @@ namespace EndPoint.Site.Controllers
 
             var result = await _chatroomsFacad.GetChatroomDetailByGuid.ExecuteAsync(UserId, Guid);
 
-            return Json(result);
+            ChatroomDetailsViewModel Data = new ChatroomDetailsViewModel()
+            {
+                ChatroomGuid = result.Data.ChatroomGuid,
+                ChatroomName = result.Data.ChatroomName,
+                ImageName = result.Data.ImageName,
+                Type = result.Data.Type,
+                Messages = result.Data.Messages.Select(m => new ChatroomMessageViewModel()
+                {
+                    Date = m.Date,
+                    ImageName = m.ImageName,
+                    IsMe = m.IsMe,
+                    MessageId = m.MessageId,
+                    SenderName = m.SenderName,
+                    Text = m.Text,
+                }),
+            };
+
+            return Json(new { Status = result.Status, Data = Data });
         }
 
 
@@ -80,7 +123,7 @@ namespace EndPoint.Site.Controllers
 
             var result = await _chatroomsFacad.CreateNewGroupService.ExecuteAsync(request);
 
-            return Json(result);
+            return Json(new { Status = result.Status });
         }
 
         [HttpGet]
@@ -92,20 +135,48 @@ namespace EndPoint.Site.Controllers
             {
                 var MyUserId = User.GetUserId();
 
+
                 if (GetTypeResult.Data == ChatroomType.PV)
                 {
+                    #region Return User Profile
                     var GetUserIdResult = await _chatroomsFacad.GetUserIdByPVGuidService.ExecuteAsync(MyUserId, ChatroomGuid);
-
                     var result = await _usersFacad.GetUserPublicProfileByUserIdService.ExecuteAsync(GetUserIdResult.Data);
 
-                    return Json(new { Data = result.Data, type = GetTypeResult.Data, Status = result.Status, Guid = ChatroomGuid });
+                    UserPublicProfileViewModel Data = new UserPublicProfileViewModel()
+                    {
+                        Bio = result.Data.Bio,
+                        ImageName = result.Data.ImageName,
+                        Name = result.Data.Name,
+                        UserHaskKey = result.Data.UserHaskKey,
+                        Username = result.Data.Username,
+                    };
+
+                    return Json(new { Data = Data, type = GetTypeResult.Data, Status = result.Status, Guid = ChatroomGuid });
+                    #endregion
                 }
                 else
                 {
+                    #region Return Group Profile
                     var result = await _chatroomsFacad.GetGroupDetailForProfileService.ExecuteAsync(MyUserId, ChatroomGuid);
 
-                    return Json(new { Data = result.Data, type = GetTypeResult.Data, Status = result.Status, Guid = ChatroomGuid });
+                    GroupDetailForProfileViewModel Data = new GroupDetailForProfileViewModel()
+                    {
+                        GroupName = result.Data.GroupName,
+                        ImageName = result.Data.ImageName,
+                        MyLevel = result.Data.MyLevel,
+                        Members = result.Data.Members.Select(m => new GroupMemberViewModel()
+                        {
+                            HashKey = m.HashKey,
+                            MemberLevel = m.MemberLevel,
+                            ImageName = m.ImageName,
+                            Name = m.Name,
+                        }),
+                    };
+
+                    return Json(new { Data = Data, type = GetTypeResult.Data, Status = result.Status, Guid = ChatroomGuid });
+                    #endregion
                 }
+
             }
 
             return Json(GetTypeResult);
@@ -128,7 +199,7 @@ namespace EndPoint.Site.Controllers
 
             var result = await _chatroomsFacad.ChangeJoinLinkGuidService.ExecuteAsync(UserId, chatroomGuid);
 
-            return Json(result);
+            return Json(new { Status = result.Status, Data = result.Data });
         }
 
         [Route("JoinChat/{JoinLinkGuid}")]
@@ -154,8 +225,22 @@ namespace EndPoint.Site.Controllers
             var UserId = User.GetUserId();
 
             var result = await _chatroomsFacad.JoinToChatWithLinkService.ExecuteAsync(UserId, JoinLinkGuid);
-
-            return Json(result);
+            if (result.Data != null)
+            {
+                JoinedChatDetailsViewModel Data = new JoinedChatDetailsViewModel()
+                {
+                    ChatroomName = result.Data.ChatroomName,
+                    Guid = result.Data.Guid,
+                    ImageName = result.Data.ImageName,
+                    LastMessage = result.Data.LastMessage,
+                    LastMessageTime = result.Data.LastMessageTime,
+                };
+                return Json(new { Status = result.Status, Data = Data });
+            }
+            else
+            {
+                return Json(new { Status = result.Status });
+            }
         }
 
         [HttpPost]
@@ -165,7 +250,7 @@ namespace EndPoint.Site.Controllers
 
             var result = await _chatroomsFacad.GetChatroomGuidByJoinGuidService.ExecuteAsync(UserId, JoinLinkGuid);
 
-            return Json(result);
+            return Json(new { Status = result.Status, Data = result.Data });
         }
     }
 }

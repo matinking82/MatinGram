@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MatinGram.ViewModels.ViewModels.Messages;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,12 +7,14 @@ using System.Threading.Tasks;
 
 namespace MatinGram.ViewModels.ViewModels.Chatrooms
 {
-    public record ChatroomsListViewModel
+    public record ChatroomPVDetailsViewModel
     {
-        public string LastMessage { get; set; }
         public string ChatroomName { get; set; }
         public string ImageName { get; set; }
-        public DateTime? LastMessageTime { get; set; }
-        public Guid Guid { get; set; }
+        public Guid ChatroomGuid { get; set; }
+        public IEnumerable<PVMessageViewModel> Messages { get; set; }
     }
+
+    
+
 }

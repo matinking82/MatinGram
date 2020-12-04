@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MatinGram.ViewModels.ViewModels.Chatrooms
 {
-    public record ChatroomsListViewModel
+    public record JoinedChatDetailsViewModel
     {
         public string LastMessage { get; set; }
         public string ChatroomName { get; set; }

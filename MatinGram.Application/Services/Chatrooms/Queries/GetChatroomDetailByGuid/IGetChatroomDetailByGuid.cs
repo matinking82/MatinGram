@@ -119,7 +119,7 @@ namespace MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByGu
                         {
                             var sender = _context.Users.Find(message.SenderId);
 
-                            messageData.SenderName = sender.Name;
+                            messageData.SenderName = sender?.Name;
 
                             var userImage = await _context.UserImages
                             .FirstOrDefaultAsync(i => i.UserId == message.SenderId);

@@ -584,3 +584,17 @@ i.admin {
 .message-sent p, .message-received p {
     font-size:20px;
 }
+
+.col-message-info {
+    text-align: center;
+    display: block;
+    width: 100%;
+}
+
+    .col-message-info span {
+        background-color: lightgray;
+        opacity: .5;
+        padding: 10px;
+        font-size: 10px;
+        border-radius: 30px;
+    }

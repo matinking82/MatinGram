@@ -3,6 +3,7 @@ using MatinGram.Application.Interfaces.FacadPatterns;
 using MatinGram.Application.Services.Chatrooms.FacadPattern;
 using MatinGram.Application.Services.Messages.FacadPattern;
 using MatinGram.Application.Services.Users.FacadPattern;
+using MatinGram.Common.Enums;
 using MatinGram.Persistace.Context;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -43,6 +44,13 @@ namespace EndPoint.Site
                 options.LoginPath = new PathString("/Signin");
                 options.AccessDeniedPath = new PathString("/");
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(43200.0);
+            });
+
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Admin", policy => policy.RequireRole(UserInRole.Admin.ToString()));
+                options.AddPolicy("User", policy => policy.RequireRole(UserInRole.User.ToString(), UserInRole.Admin.ToString()));
             });
 
             #region --Add DependencyInjection Service--

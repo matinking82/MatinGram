@@ -6,6 +6,7 @@ using MatinGram.Common.Enums;
 using MatinGram.ViewModels.ViewModels.Chatrooms;
 using MatinGram.ViewModels.ViewModels.Messages;
 using MatinGram.ViewModels.ViewModels.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ using System.Threading.Tasks;
 
 namespace EndPoint.Site.Controllers
 {
+    [Authorize("User")]
     public class ChatroomsController : Controller
     {
         private readonly IChatroomsFacad _chatroomsFacad;

@@ -7,9 +7,11 @@ using MatinGram.ViewModels.ViewModels.Messages;
 using MatinGram.Application.Interfaces.FacadPatterns;
 using MatinGram.Application.Services.Messages.Commands.AddNewMessage;
 using EndPoint.Site.Utilities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EndPoint.Site.Controllers
 {
+    [Authorize("User")]
     public class MessagesController : Controller
     {
         private readonly IMessagesFacad _messagesFacad;

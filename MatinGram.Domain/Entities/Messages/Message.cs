@@ -31,10 +31,17 @@ namespace MatinGram.Domain.Entities.Messages
         public virtual Chatroom Chatroom { get; set; }
         public int ChatroomID { get; set; }
 
+        public MessageType MessageType { get; set; }
 
         #region --Reply--
         //public virtual Message Reply { get; set; }
         //public long ReplyId { get; set; }
         #endregion
+    }
+
+    public enum MessageType
+    {
+        Massage,
+        Info
     }
 }

@@ -1,5 +1,6 @@
 ﻿using MatinGram.Application.Interfaces;
 using MatinGram.Common.Dto;
+using MatinGram.Domain.Entities.Messages;
 using MatinGram.Domain.Entities.Relations;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -62,6 +63,16 @@ namespace MatinGram.Application.Services.Chatrooms.Commands.JoinToChatWithLink
 
                     await _context.UserInChatrooms.AddAsync(newUserInChatroom);
 
+                    Message info = new Message()
+                    {
+                        Chatroom = chatroom,
+                        ChatroomID = chatroom.Id,
+                        MessageType = MessageType.Info,
+                        SendDate = DateTime.Now,
+                        Text = $" {user.Name} به گروه پیوست",
+                    };
+
+                    await _context.Messages.AddAsync(info);
 
                     await _context.SaveChangesAsync();
 

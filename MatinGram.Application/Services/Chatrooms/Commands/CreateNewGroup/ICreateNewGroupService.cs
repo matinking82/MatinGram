@@ -2,6 +2,7 @@
 using MatinGram.Common.Dto;
 using MatinGram.Common.Utilities;
 using MatinGram.Domain.Entities.Chatrooms;
+using MatinGram.Domain.Entities.Messages;
 using MatinGram.Domain.Entities.Relations;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -69,6 +70,16 @@ namespace MatinGram.Application.Services.Chatrooms.Commands.CreateNewGroup
                     };
                     await _context.Chatrooms.AddAsync(newChatroom);
 
+                    Message info = new Message()
+                    {
+                        Chatroom = newChatroom,
+                        ChatroomID = newChatroom.Id,
+                        MessageType = MessageType.Info,
+                        SendDate = DateTime.Now,
+                        Text = $"گروه {newChatroom.Name} ایجاد شد"
+                    };
+
+                    await _context.Messages.AddAsync(info);
                     #endregion
 
                     #region --add image to group--

@@ -63,6 +63,7 @@ namespace MatinGram.Application.Services.Messages.Commands.AddNewMessage
                         Sender = user,
                         SenderId = request.UserId,
                         Text = request.Text,
+                        MessageType = MessageType.Massage
                     };
 
                     await _context.Messages.AddAsync(message);

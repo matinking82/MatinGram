@@ -477,7 +477,7 @@ async function btnCamera_Click() {
 }
 
 async function ClearChats() {
-    var AllMessages = document.querySelectorAll('.message-out .grid-message div.col-message-received,.message-out .grid-message div.col-message-sent');
+    var AllMessages = document.querySelectorAll('.message-out .grid-message div.col-message-received,.message-out .grid-message div.col-message-sent, div.col-message-info');
 
     if (AllMessages != null) {
         for (var i = 0; i < AllMessages.length; i++) {

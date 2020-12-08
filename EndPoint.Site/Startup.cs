@@ -59,7 +59,8 @@ namespace EndPoint.Site
 
 
             #region --ConnectionString--
-            string contectionString = @"Data Source=.; Initial Catalog=MatinGram_DB; Integrated Security=True;";
+            string contectionString = Configuration.GetConnectionString("SqlServer");
+
             services.AddEntityFrameworkSqlServer().AddDbContext<DataBaseContext>(option => option.UseSqlServer(contectionString));
             #endregion
 

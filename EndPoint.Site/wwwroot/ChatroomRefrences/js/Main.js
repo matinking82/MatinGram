@@ -173,26 +173,43 @@ async function BuildChat(data) {
     ChatroomGuid = data.chatroomGuid;
     ChatroomImage.setAttribute('src', data.imageName);
     ChatroomName.innerHTML = data.chatroomName
-
+    debugger;
     for (var i = 0; i < data.messages.length; i++) {
         var item = data.messages[i];
+        if (item.messageType == 1) {
+            AddInfoMessage(item);
+        } else {
+            switch (data.type) {
+                case 0:
+                    AddMessagePV(item);
+                    break;
 
-        switch (data.type) {
-            case 0:
-                AddMessagePV(item);
-                break;
+                case 1:
+                    AddMessageChat(item);
+                    break;
 
-            case 1:
-                AddMessageChat(item);
-                break;
-
-            default:
-                console.log("failed");
-                break;
+                default:
+                    console.log("failed");
+                    break;
+            }
         }
     }
     messagesBox.scrollTo(0, 100000010000001000);
 
+}
+
+async function AddInfoMessage(item) {
+    var outdiv = document.createElement('div');
+    var span = document.createElement('span');
+
+
+    outdiv.classList.add('col-message-info');
+    span.classList.add('badge');
+    span.innerHTML = item.text;
+
+    outdiv.appendChild(span);
+
+    ChatsBox.appendChild(outdiv);
 }
 
 async function AddMessageChat(item) {
@@ -258,13 +275,16 @@ async function BuildPV(data) {
     ChatroomGuid = data.chatroomGuid;
     ChatroomImage.setAttribute('src', data.imageName);
     ChatroomName.innerHTML = data.chatroomName
-
     if (data.messages != null) {
         for (var i = 0; i < data.messages.length; i++) {
 
             var item = data.messages[i];
 
-            AddMessagePV(item);
+            if (item.messageType == 1) {
+                AddInfoMessage(item);
+            } else {
+                AddMessagePV(item);
+            }
         }
     }
     messagesBox.scrollTo(0, 100000010000001000);
@@ -303,7 +323,6 @@ function MakeMessagesText(Text) {
 }
 
 function SetUserNames(Text) {
-    debugger;
     var rx = new RegExp('\\s{0,1}\@{1}(\\w{1}[\\d \\w]+)\\b');
 
 
@@ -319,7 +338,6 @@ function SetUserNames(Text) {
 function SetJoinLinks(Text) {
 
     //https://localhost:5001/JoinChat/4ad5c061-184e-44b2-93af-bdda78e90552
-    debugger;
     var rx = new RegExp('\\s{0,1}(https://localhost:5001/JoinChat/([\\d \\w]{8}-[\\d \\w]{4}-[\\d \\w]{4}-[\\d \\w]{4}-[\\d \\w]{12}))', "g");
 
     var foundAll = Text.match(rx);

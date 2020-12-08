@@ -26,7 +26,7 @@ namespace MatinGram.Domain.Entities.Messages
         public string ImageName { get; set; }
 
         public virtual User Sender { get; set; }
-        public long SenderId { get; set; }
+        public long? SenderId { get; set; }
 
         public virtual Chatroom Chatroom { get; set; }
         public int ChatroomID { get; set; }

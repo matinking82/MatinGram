@@ -1,6 +1,7 @@
 ﻿using MatinGram.Application.Interfaces;
 using MatinGram.Common.Dto;
 using MatinGram.Common.Enums;
+using MatinGram.Domain.Entities.Messages;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -112,6 +113,7 @@ namespace MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByGu
                         messageData.IsMe = message.SenderId == UserId;
                         messageData.MessageId = message.Id;
                         messageData.Text = message.Text;
+                        messageData.MessageType = message.MessageType;
 
                         if (chatroom.ChatroomType == ChatroomType.Group)
                         {
@@ -147,7 +149,6 @@ namespace MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByGu
                 }
                 catch (Exception e)
                 {
-                    _ = e.Message;
                     return new ResultDto<ChatroomDetailByGuidDto>()
                     {
                         Status = Common.Enums.ServiceStatus.SystemError,
@@ -176,5 +177,7 @@ namespace MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByGu
 
         public string ImageName { get; set; }
         public string SenderName { get; set; }
+
+        public MessageType MessageType { get; set; }
     }
 }

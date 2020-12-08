@@ -62,6 +62,7 @@ namespace EndPoint.Site.Controllers
                     IsMe = m.IsMe,
                     MessageId = m.MessageId,
                     Text = m.Text,
+                    MessageType = m.MessageType
                 }).ToList(),
             };
 
@@ -90,6 +91,7 @@ namespace EndPoint.Site.Controllers
                     MessageId = m.MessageId,
                     SenderName = m.SenderName,
                     Text = m.Text,
+                    MessageType = m.MessageType
                 }),
             };
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MatinGram.Domain.Entities.Messages;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,5 +16,7 @@ namespace MatinGram.ViewModels.ViewModels.Messages
 
         public string ImageName { get; set; }
         public string SenderName { get; set; }
+
+        public MessageType MessageType { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using MatinGram.Common.Dto;
 using MatinGram.Common.Enums;
 using MatinGram.Domain.Entities.Chatrooms;
+using MatinGram.Domain.Entities.Messages;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -80,7 +81,8 @@ namespace MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByUs
                             Date = m.SendDate,
                             IsMe = m.SenderId == MyId,
                             MessageId = m.Id,
-                            Text = m.Text
+                            MessageType = m.MessageType,
+                            Text = m.Text,
                         });
 
                         Data.ChatroomGuid = PVChat.Guid;
@@ -124,6 +126,7 @@ namespace MatinGram.Application.Services.Chatrooms.Queries.GetChatroomDetailByUs
         public DateTime Date { get; set; }
         public bool IsMe { get; set; }
         public long MessageId { get; set; }
+        public MessageType MessageType { get; set; }
     }
 
 

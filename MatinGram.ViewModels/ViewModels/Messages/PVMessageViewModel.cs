@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MatinGram.Domain.Entities.Messages;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,5 +13,7 @@ namespace MatinGram.ViewModels.ViewModels.Messages
         public DateTime Date { get; set; }
         public bool IsMe { get; set; }
         public long MessageId { get; set; }
+
+        public MessageType MessageType { get; set; }
     }
 }
